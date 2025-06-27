@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Summary Tool</title>
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-light: #a5b4fc;
+            --primary-dark: #4f46e5;
+            --secondary: #8b5cf6;
+            --accent: #ec4899;
+            --text: #374151;
+            --text-light: #6b7280;
+            --bg: #f9fafb;
+            --card-bg: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            color: var(--text);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Form Styles */
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 2rem;
+            animation: fadeIn 0.8s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--primary-dark);
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--text);
+        }
+
+        input, select {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            border: 1px solid #d1d5db;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+        }
+
+        .radio-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .radio-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        button {
+            width: 100%;
+            padding: 1rem;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: var(--primary-dark);
+        }
+
+        /* Animation Screen */
+        .animation-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 400px;
+            text-align: center;
+        }
+
+        .spinner {
+            width: 80px;
+            height: 80px;
+            border: 8px solid var(--primary-light);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-bottom: 2rem;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Styles */
+        .results-container {
+            display: none;
+            padding: 2rem 0;
+        }
+
+        .section {
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInUp {
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+
+        .section-header h2 {
+            color: var(--primary-dark);
+            font-size: 1.8rem;
+            display: inline-block;
+            background: var(--card-bg);
+            padding: 0 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .section-header::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: linear-gradient(to right, transparent, var(--primary-light), transparent);
+            z-index: 0;
+        }
+
+        .summary-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .summary-header h2 {
+            color: var(--primary-dark);
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        .summary-header p {
+            color: var(--text-light);
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .badges-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            margin: 2rem 0;
+        }
+
+        .badge {
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 9999px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            animation: fadeIn 0.5s ease-out;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .stat-card {
+            padding: 1.5rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.5s ease-out forwards;
+        }
+
+        .stat-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .stat-letter {
+            width: 36px;
+            height: 36px;
+            background-color: var(--primary-light);
+            color: var(--primary-dark);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 1rem;
+            flex-shrink: 0;
+        }
+
+        .stat-title {
+            font-weight: 600;
+            flex-grow: 1;
+        }
+
+        .stat-icon {
+            color: var(--primary);
+            font-size: 1.5rem;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-tooltip {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+
+        /* Time Chart */
+        .time-chart {
+            background-color: var(--card-bg);
+            padding: 2rem;
+            border-radius: 1rem;
+            margin: 2rem auto;
+            max-width: 600px;
+        }
+
+        .chart-title {
+            text-align: center;
+            margin-bottom: 1.5rem;
+            color: var(--primary-dark);
+            font-weight: 600;
+        }
+
+        .chart-bars {
+            display: flex;
+            height: 200px;
+            align-items: flex-end;
+            justify-content: center;
+            gap: 1.5rem;
+            padding: 0 2rem;
+        }
+
+        .chart-bar {
+            flex: 1;
+            max-width: 80px;
+            border-radius: 0.5rem 0.5rem 0 0;
+            position: relative;
+            transform-origin: bottom;
+            animation: grow 1s ease-out forwards;
+        }
+
+        .chart-bar.sleep {
+            background: linear-gradient(to top, #6366f1, #8b5cf6);
+            height: 70%;
+        }
+
+        .chart-bar.work {
+            background: linear-gradient(to top, #ec4899, #f43f5e);
+            height: 40%;
+        }
+
+        .chart-bar.leisure {
+            background: linear-gradient(to top, #10b981, #14b8a6);
+            height: 25%;
+        }
+
+        .chart-bar.other {
+            background: linear-gradient(to top, #f59e0b, #f97316);
+            height: 35%;
+        }
+
+        @keyframes grow {
+            from { transform: scaleY(0); }
+            to { transform: scaleY(1); }
+        }
+
+        .chart-label {
+            position: absolute;
+            bottom: -2rem;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            font-weight: 500;
+        }
+
+        .chart-percentage {
+            position: absolute;
+            top: -2rem;
+            left: 0;
+            right: 0;
+            text-align: center;
+            font-weight: 600;
+            color: white;
+        }
+
+        /* Category Sections */
+        .category-intro {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            line-height: 1.6;
+        }
+
+        /* Progress Button */
+        .progress-btn {
+            display: block;
+            width: 200px;
+            margin: 3rem auto;
+            padding: 1rem;
+            background-color: var(--accent);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            box-shadow: 0 4px 6px -1px rgba(236, 72, 153, 0.3);
+        }
+
+        .progress-btn:hover {
+            background-color: #db2777;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px -3px rgba(236, 72, 153, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-container {
+                padding: 1.5rem;
+            }
+            
+            .section-header h2 {
+                font-size: 1.5rem;
+                padding: 0 1rem;
+            }
+            
+            .summary-header h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Form Section -->
+        <div class="card form-container" id="formSection">
+            <h1>Life Summary Tool</h1>
+            <form id="lifeForm">
+                <div class="form-group">
+                    <label for="name">Your Name</label>
+                    <input type="text" id="name" name="name" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="birthdate">Birthdate</label>
+                    <input type="date" id="birthdate" name="birthdate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>Gender</label>
+                    <div class="radio-group">
+                        <label class="radio-option">
+                            <input type="radio" name="gender" value="male" checked> Male
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="gender" value="female"> Female
+                        </label>
+                        <label class="radio-option">
+                            <input type="radio" name="gender" value="other"> Other
+                        </label>
+                    </div>
+                </div>
+                
+                <button type="submit">Generate My Life Summary</button>
+            </form>
+        </div>
+        
+        <!-- Animation Section -->
+        <div class="card animation-container" id="animationSection">
+            <div class="spinner"></div>
+            <h2>Calculating your life journey...</h2>
+            <p>We're analyzing your amazing life story</p>
+        </div>
+        
+        <!-- Results Section -->
+        <div class="results-container" id="resultsSection">
+            <!-- Personal Summary Section -->
+            <div class="section" id="personalSummary" style="animation-delay: 0.2s">
+                <div class="summary-header">
+                    <h2 id="userTitle">John's Life Summary</h2>
+                    <p id="userAge">30 years of amazing experiences</p>
+                </div>
+                
+                <div class="badges-container" id="badgesContainer">
+                    <!-- Badges will be added here by JavaScript -->
+                </div>
+                
+                <div class="card time-chart">
+                    <h3 class="chart-title">How You've Spent Your Time</h3>
+                    <div class="chart-bars">
+                        <div class="chart-bar sleep" style="animation-delay: 0.3s">
+                            <div class="chart-percentage">35%</div>
+                            <span class="chart-label">Sleep</span>
+                        </div>
+                        <div class="chart-bar work" style="animation-delay: 0.5s">
+                            <div class="chart-percentage">20%</div>
+                            <span class="chart-label">Work</span>
+                        </div>
+                        <div class="chart-bar leisure" style="animation-delay: 0.7s">
+                            <div class="chart-percentage">12%</div>
+                            <span class="chart-label">Leisure</span>
+                        </div>
+                        <div class="chart-bar other" style="animation-delay: 0.9s">
+                            <div class="chart-percentage">33%</div>
+                            <span class="chart-label">Other</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="progress-btn" onclick="showSection('dailyLife')">Continue to Daily Life →</button>
+            </div>
+            
+            <!-- Daily Life Section -->
+            <div class="section" id="dailyLife" style="display: none; animation-delay: 0.2s">
+                <div class="section-header">
+                    <h2>Your Daily Life</h2>
+                </div>
+                
+                <p class="category-intro">
+                    Let's explore the everyday activities that make up your life. From meals to showers, 
+                    these are the routines that shape your days.
+                </p>
+                
+                <div class="stats-grid" id="dailyLifeGrid">
+                    <!-- Daily life stats will be added here by JavaScript -->
+                </div>
+                
+                <button class="progress-btn" onclick="showSection('achievements')">Explore Achievements →</button>
+            </div>
+            
+            <!-- Achievements Section -->
+            <div class="section" id="achievements" style="display: none; animation-delay: 0.2s">
+                <div class="section-header">
+                    <h2>Your Achievements</h2>
+                </div>
+                
+                <p class="category-intro">
+                    These numbers represent your accomplishments and milestones. 
+                    Each one tells a story of growth, learning, and success.
+                </p>
+                
+                <div class="stats-grid" id="achievementsGrid">
+                    <!-- Achievement stats will be added here by JavaScript -->
+                </div>
+                
+                <button class="progress-btn" onclick="showSection('relationships')">Discover Relationships →</button>
+            </div>
+            
+            <!-- Relationships Section -->
+            <div class="section" id="relationships" style="display: none; animation-delay: 0.2s">
+                <div class="section-header">
+                    <h2>Your Relationships</h2>
+                </div>
+                
+                <p class="category-intro">
+                    Life is about connections. These numbers reflect the people who've shared 
+                    your journey and the moments you've created together.
+                </p>
+                
+                <div class="stats-grid" id="relationshipsGrid">
+                    <!-- Relationship stats will be added here by JavaScript -->
+                </div>
+                
+                <button class="progress-btn" onclick="showSection('funFacts')">See Fun Facts →</button>
+            </div>
+            
+            <!-- Fun Facts Section -->
+            <div class="section" id="funFacts" style="display: none; animation-delay: 0.2s">
+                <div class="section-header">
+                    <h2>Fun Facts About You</h2>
+                </div>
+                
+                <p class="category-intro">
+                    These surprising statistics reveal the extraordinary in your ordinary. 
+                    Some of these numbers might just amaze you!
+                </p>
+                
+                <div class="stats-grid" id="funFactsGrid">
+                    <!-- Fun fact stats will be added here by JavaScript -->
+                </div>
+                
+                <button class="progress-btn" onclick="showSection('personalSummary')">Back to Summary</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentUser = {};
+        let lifeStats = {};
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('lifeForm');
+            const formSection = document.getElementById('formSection');
+            const animationSection = document.getElementById('animationSection');
+            const resultsSection = document.getElementById('resultsSection');
+            
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Get form values
+                currentUser = {
+                    name: document.getElementById('name').value,
+                    birthdate: document.getElementById('birthdate').value,
+                    gender: document.querySelector('input[name="gender"]:checked').value
+                };
+                
+                // Calculate age
+                currentUser.age = calculateAge(currentUser.birthdate);
+                
+                // Show animation
+                formSection.style.display = 'none';
+                animationSection.style.display = 'flex';
+                
+                // After animation delay, show results
+                setTimeout(function() {
+                    animationSection.style.display = 'none';
+                    resultsSection.style.display = 'block';
+                    
+                    // Generate and display results
+                    lifeStats = generateLifeStats(currentUser.age);
+                    displayResults();
+                }, 3000);
+            });
+        });
+        
+        function calculateAge(birthdate) {
+            const birthDate = new Date(birthdate);
+            const today = new Date();
+            let age = today.getFullYear() - birthDate.getFullYear();
+            const monthDiff = today.getMonth() - birthDate.getMonth();
+            
+            if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+                age--;
+            }
+            
+            return age;
+        }
+        
+        function generateLifeStats(age) {
+            const years = age;
+            const months = years * 12;
+            const weeks = years * 52;
+            const days = years * 365;
+            const hours = days * 24;
+            const minutes = hours * 60;
+            const seconds = minutes * 60;
+            
+            // Average assumptions
+            const booksPerYear = 12;
+            const mealsPerDay = 3;
+            const caloriesPerMeal = 600;
+            const stepsPerDay = 7500;
+            const workHoursPerDay = 8;
+            const sleepHoursPerDay = 8;
+            const leisureHoursPerDay = 4;
+            const otherHoursPerDay = 4;
+            const showersPerWeek = 5;
+            const vacationsPerYear = 1;
+            const dreamsPerNight = 5;
+            const laughsPerDay = 15;
+            const cupsOfCoffeePerDay = 2;
+            const timeOnSocialMediaPerDay = 2; // hours
+            const timeWatchingTVPerDay = 2; // hours
+            const timeShoppingPerMonth = 8; // hours
+            
+            return {
+                age: years,
+                achievements: Math.floor(Math.random() * 100) + 10,
+                booksRead: years * booksPerYear,
+                caloriesConsumed: days * mealsPerDay * caloriesPerMeal,
+                dreamsHad: days * dreamsPerNight,
+                experiences: Math.floor(Math.random() * 500) + 50,
+                friends: Math.floor(Math.random() * 200) + 20,
+                goalsAchieved: Math.floor(Math.random() * 50) + 5,
+                hoursWorked: days * workHoursPerDay,
+                itemsPurchased: months * 30,
+                jokesTold: days * Math.floor(Math.random() * 3),
+                kilometersWalked: days * (stepsPerDay * 0.000762), // 0.000762 km per step
+                laughs: days * laughsPerDay,
+                mealsEaten: days * mealsPerDay,
+                nightsSlept: days,
+                opportunities: Math.floor(Math.random() * 100) + 10,
+                placesVisited: years * vacationsPerYear * 3,
+                questionsAsked: days * 20,
+                relationships: Math.floor(Math.random() * 20) + 3,
+                showersTaken: weeks * showersPerWeek,
+                socialMediaHours: days * timeOnSocialMediaPerDay,
+                tvHours: days * timeWatchingTVPerDay,
+                uniqueDays: days,
+                vacationsTaken: years * vacationsPerYear,
+                wordsSpoken: days * 16000,
+                xpGained: Math.floor(Math.random() * 1000000) + 100000,
+                yoloMoments: Math.floor(Math.random() * 100) + 10,
+                zzzDreams: days * dreamsPerNight,
+                timeBreakdown: {
+                    sleep: sleepHoursPerDay * days,
+                    work: workHoursPerDay * days,
+                    leisure: leisureHoursPerDay * days,
+                    other: otherHoursPerDay * days
+                }
+            };
+        }
+        
+        function getBadges(stats) {
+            const badges = [];
+            
+            if (stats.booksRead > 500) badges.push('Book Worm');
+            if (stats.kilometersWalked > 384400) badges.push('Moon Walker');
+            if (stats.laughs > 100000) badges.push('Joy Spreader');
+            if (stats.dreamsHad > 50000) badges.push('Dream Weaver');
+            if (stats.placesVisited > 50) badges.push('Globe Trotter');
+            if (stats.caloriesConsumed > 10000000) badges.push('Food Connoisseur');
+            
+            return badges;
+        }
+        
+        function getTooltip(letter, value) {
+            const tooltips = {
+                'A': `You've achieved ${value} milestones!`,
+                'B': `That's ${Math.floor(value/20)} books per year!`,
+                'C': `Enough energy to power ${Math.floor(value/2000000)} homes for a day!`,
+                'D': `Your mind's nightly cinema (${value} shows)`,
+                'E': `Moments that shaped who you are`,
+                'F': `Your personal support network`,
+                'G': `Dreams turned into reality`,
+                'H': `That's dedication! (${value} hours)`,
+                'I': `Retail therapy adds up (${value} items)`,
+                'J': `Keep spreading the laughter`,
+                'K': `You've walked ${Math.floor(value)}km - that's ${Math.floor(value/384400*100)}% to the moon!`,
+                'L': `Laughter is the best medicine (${value} times)`,
+                'M': `Breakfast, lunch and dinner x${value}`,
+                'N': `Sweet dreams x${value}`,
+                'O': `Chances to shine you've had`,
+                'P': `Your passport to adventure (${value} places)`,
+                'Q': `Curiosity never rests (${value} questions)`,
+                'R': `Connections that matter in life`,
+                'S': `Cleanliness is next to... (${value} showers)`,
+                'T': `Binge-watching champion (${value} hours)`,
+                'U': `Each day special in its own way`,
+                'V': `Well-deserved breaks (${value} vacations)`,
+                'W': `That's ${Math.floor(value/50000)} novels worth of words!`,
+                'X': `Leveling up in life (${value} XP)`,
+                'Y': `You only live once... but you lived it well`,
+                'Z': `Your subconscious adventures (${value} dreams)`
+            };
+            
+            return tooltips[letter] || `Interesting fact about ${letter}`;
+        }
+        
+        function displayResults() {
+            // Set user info
+            document.getElementById('userTitle').textContent = `${currentUser.name}'s Life Summary`;
+            document.getElementById('userAge').textContent = `${currentUser.age} years of amazing experiences`;
+            
+            // Add badges
+            const badges = getBadges(lifeStats);
+            const badgesContainer = document.getElementById('badgesContainer');
+            badgesContainer.innerHTML = '';
+            badges.forEach((badge, index) => {
+                const badgeEl = document.createElement('span');
+                badgeEl.className = 'badge';
+                badgeEl.textContent = badge;
+                badgeEl.style.animationDelay = `${index * 0.1}s`;
+                badgesContainer.appendChild(badgeEl);
+            });
+            
+            // Create categorized stat cards
+            createDailyLifeCards();
+            createAchievementCards();
+            createRelationshipCards();
+            createFunFactCards();
+            
+            // Show first section
+            showSection('personalSummary');
+        }
+        
+        function createDailyLifeCards() {
+            const dailyLifeStats = [
+                { letter: 'M', title: 'Meals Eaten', value: lifeStats.mealsEaten },
+                { letter: 'S', title: 'Showers Taken', value: lifeStats.showersTaken },
+                { letter: 'N', title: 'Nights Slept', value: lifeStats.nightsSlept },
+                { letter: 'K', title: 'Kilometers Walked', value: Math.floor(lifeStats.kilometersWalked) },
+                { letter: 'T', title: 'TV Hours', value: lifeStats.tvHours },
+                { letter: 'D', title: 'Dreams Had', value: lifeStats.dreamsHad }
+            ];
+            
+            createStatCards(dailyLifeStats, 'dailyLifeGrid');
+        }
+        
+        function createAchievementCards() {
+            const achievementStats = [
+                { letter: 'A', title: 'Achievements', value: lifeStats.achievements },
+                { letter: 'B', title: 'Books Read', value: lifeStats.booksRead },
+                { letter: 'G', title: 'Goals Achieved', value: lifeStats.goalsAchieved },
+                { letter: 'P', title: 'Places Visited', value: lifeStats.placesVisited },
+                { letter: 'V', title: 'Vacations Taken', value: lifeStats.vacationsTaken },
+                { letter: 'X', title: 'XP Gained', value: lifeStats.xpGained }
+            ];
+            
+            createStatCards(achievementStats, 'achievementsGrid');
+        }
+        
+        function createRelationshipCards() {
+            const relationshipStats = [
+                { letter: 'F', title: 'Friends', value: lifeStats.friends },
+                { letter: 'R', title: 'Relationships', value: lifeStats.relationships },
+                { letter: 'L', title: 'Laughs', value: lifeStats.laughs },
+                { letter: 'J', title: 'Jokes Told', value: lifeStats.jokesTold },
+                { letter: 'W', title: 'Words Spoken', value: lifeStats.wordsSpoken },
+                { letter: 'Q', title: 'Questions Asked', value: lifeStats.questionsAsked }
+            ];
+            
+            createStatCards(relationshipStats, 'relationshipsGrid');
+        }
+        
+        function createFunFactCards() {
+            const funFactStats = [
+                { letter: 'C', title: 'Calories Consumed', value: lifeStats.caloriesConsumed },
+                { letter: 'H', title: 'Hours Worked', value: lifeStats.hoursWorked },
+                { letter: 'I', title: 'Items Purchased', value: lifeStats.itemsPurchased },
+                { letter: 'U', title: 'Unique Days', value: lifeStats.uniqueDays },
+                { letter: 'Y', title: 'YOLO Moments', value: lifeStats.yoloMoments },
+                { letter: 'Z', title: 'Zzz Dreams', value: lifeStats.zzzDreams }
+            ];
+            
+            createStatCards(funFactStats, 'funFactsGrid');
+        }
+        
+        function createStatCards(stats, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            
+            // Icons for stats (using emojis)
+            const icons = {
+                'A': '🏆', 'B': '📚', 'C': '🍔', 'D': '💭', 'E': '🌟', 
+                'F': '👥', 'G': '🎯', 'H': '💼', 'I': '🛒', 'J': '😂', 
+                'K': '🚶', 'L': '😄', 'M': '🍽️', 'N': '🌙', 'O': '🔑', 
+                'P': '✈️', 'Q': '❓', 'R': '💑', 'S': '🚿', 'T': '📺', 
+                'U': '📅', 'V': '🏖️', 'W': '🗣️', 'X': '⚡', 'Y': '🎉', 
+                'Z': '😴'
+            };
+            
+            stats.forEach((stat, index) => {
+                const statCard = document.createElement('div');
+                statCard.className = 'stat-card card';
+                statCard.style.animationDelay = `${index * 0.1}s`;
+                
+                statCard.innerHTML = `
+                    <div class="stat-header">
+                        <div class="stat-letter">${stat.letter}</div>
+                        <div class="stat-title">${stat.title}</div>
+                        <div class="stat-icon">${icons[stat.letter] || '✨'}</div>
+                    </div>
+                    <div class="stat-value" id="${containerId}-${stat.letter}">0</div>
+                    <div class="stat-tooltip">${getTooltip(stat.letter, stat.value)}</div>
+                `;
+                
+                container.appendChild(statCard);
+                
+                // Animate number counting up
+                animateNumber(`${containerId}-${stat.letter}`, stat.value);
+            });
+        }
+        
+        function animateNumber(elementId, finalValue) {
+            const element = document.getElementById(elementId);
+            const duration = 1500;
+            const startTime = performance.now();
+            const startValue = 0;
+            
+            function updateNumber(currentTime) {
+                const elapsedTime = currentTime - startTime;
+                const progress = Math.min(elapsedTime / duration, 1);
+                const currentValue = Math.floor(progress * (finalValue - startValue) + startValue);
+                
+                element.textContent = currentValue.toLocaleString();
+                
+                if (progress < 1) {
+                    requestAnimationFrame(updateNumber);
+                } else {
+                    element.textContent = finalValue.toLocaleString();
+                }
+            }
+            
+            requestAnimationFrame(updateNumber);
+        }
+        
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section').forEach(section => {
+                section.style.display = 'none';
+            });
+            
+            // Show selected section
+            const section = document.getElementById(sectionId);
+            section.style.display = 'block';
+            
+            // Scroll to top of section
+            window.scrollTo({
+                top: section.offsetTop - 20,
+                behavior: 'smooth'
+            });
+        }
+    </script>
+</body>
+</html>
