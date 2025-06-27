@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🚀 MindForge | Premium Brain Tools</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #4D8BFF;
+            --accent: #FF6584;
+            --dark: #1A1A2E;
+            --light: #F8F9FA;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background-color: #fefefe;
+            color: #333;
+            overflow-x: hidden;
+        }
+        
+        /* Glassmorphism Header */
+        .header {
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.8);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+        
+        .logo {
+            background: linear-gradient(135deg, #6C63FF, #FF6584);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e2e8f0 100%);
+        }
+        
+        .typing-container {
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .typing-text {
+            position: absolute;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 1s ease;
+        }
+        
+        .typing-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Tool Cards */
+        .tool-card {
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            transform: translateY(0);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            background: white;
+            position: relative;
+            overflow: hidden;
+            border-radius: 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .tool-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .tool-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #6C63FF, #4D8BFF);
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.6s ease;
+        }
+        
+        .tool-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .tool-card:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .tool-icon {
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            transition: all 0.4s ease;
+        }
+        
+        .tool-card:hover .tool-icon {
+            transform: scale(1.1) rotate(5deg);
+        }
+        
+        /* YOUR CUSTOM BUTTON STYLES */
+        .ad-button {
+            padding: 18px 36px;
+            background: linear-gradient(135deg, #00c6ff, #0072ff);
+            color: white;
+            border: none;
+            border-radius: 60px;
+            font-size: 20px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 6px 30px rgba(0, 114, 255, 0.5);
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.5, 1);
+            position: relative;
+            overflow: hidden;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            z-index: 1;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .ad-button::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0072ff, #00c6ff);
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            transform: scale(1.1);
+        }
+        
+        .ad-button:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 12px 40px rgba(0, 114, 255, 0.7);
+        }
+        
+        .ad-button:hover::before {
+            opacity: 1;
+            transform: scale(1);
+            animation: gradientShift 4s ease infinite;
+        }
+        
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        .ad-button:active {
+            transform: translateY(2px);
+            transition: transform 0.1s ease;
+        }
+        
+        .ad-button span {
+            display: inline-block;
+            transition: transform 0.3s ease;
+        }
+        
+        .ad-button:hover span {
+            transform: scale(1.05);
+        }
+        
+        /* Popup Styles */
+        .popup-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.96);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        .popup-overlay.active {
+            opacity: 1;
+            display: flex;
+        }
+        
+        .popup-content {
+            background: linear-gradient(145deg, #0f0f1a, #1a1a2e);
+            border-radius: 20px;
+            overflow: hidden;
+            width: 90%;
+            max-width: 800px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.8);
+            transform: scale(0.97);
+            transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .popup-overlay.active .popup-content {
+            transform: scale(1);
+        }
+        
+        .ad-container {
+            position: relative;
+            height: 550px;
+            overflow: hidden;
+        }
+        
+        .ad-label {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(0, 0, 0, 0.7);
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            z-index: 3;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .ad-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+            background: #000;
+            opacity: 0;
+            transition: opacity 1.2s ease-out;
+        }
+        
+        .ad-frame.loaded {
+            opacity: 1;
+        }
+        
+        .loading-animation {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(145deg, #0f0f1a, #1a1a2e);
+            transition: opacity 0.8s ease;
+            z-index: 2;
+        }
+        
+        .loading-animation.fade-out {
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        .loader {
+            width: 60px;
+            height: 60px;
+            border: 4px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            border-top-color: #00c6ff;
+            animation: spin 1.2s cubic-bezier(0.5, 0.1, 0.4, 0.9) infinite;
+            margin-bottom: 20px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .loading-text {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 18px;
+            margin-top: 20px;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        .timer-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 30px;
+            background: rgba(0, 0, 0, 0.3);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .timer {
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.9);
+            font-family: 'Arial', sans-serif;
+            letter-spacing: 0.5px;
+        }
+        
+        .timer-number {
+            display: inline-block;
+            min-width: 30px;
+            text-align: center;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+        }
+        
+        .skip-btn {
+            padding: 12px 28px;
+            background: linear-gradient(135deg, #ff5e62, #ff2400);
+            color: white;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: none;
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+            box-shadow: 0 4px 20px rgba(255, 94, 98, 0.3);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            opacity: 0;
+            transform: translateX(20px);
+        }
+        
+        .skip-btn.visible {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+        
+        .skip-btn:hover {
+            background: linear-gradient(135deg, #ff2400, #ff5e62);
+            box-shadow: 0 8px 30px rgba(255, 94, 98, 0.5);
+            transform: translateX(0) translateY(-3px);
+        }
+        
+        .skip-btn:active {
+            transform: translateY(1px);
+        }
+        
+        .loading-bar {
+            height: 8px;
+            background-color: rgba(255, 255, 255, 0.05);
+            width: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, #00c6ff, #0072ff);
+            width: 0%;
+            transition: width 1s linear;
+            position: relative;
+        }
+        
+        .progress::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, 
+                          rgba(255,255,255,0) 0%, 
+                          rgba(255,255,255,0.4) 50%, 
+                          rgba(255,255,255,0) 100%);
+            animation: shine 2.5s infinite;
+            animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-150%) skewX(-20deg); }
+            100% { transform: translateX(150%) skewX(-20deg); }
+        }
+        
+        .thank-you-notification {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+            padding: 12px 24px;
+            border-radius: 30px;
+            color: white;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.5s ease, bottom 0.5s ease;
+            z-index: 3;
+            border: 1px solid rgba(0, 198, 255, 0.3);
+        }
+        
+        .thank-you-notification.show {
+            opacity: 1;
+            bottom: 30px;
+        }
+        
+        .thank-you-notification span {
+            color: #00c6ff;
+            font-weight: bold;
+        }
+        
+        /* Ad Spaces */
+        .ad-space {
+            background: #f1f5f9;
+            border: 1px dashed #cbd5e1;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+            margin: 40px 0;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .ad-space.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Footer */
+        .footer {
+            background: var(--dark);
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, #6C63FF, #4D8BFF, #FF6584);
+            background-size: 300% 300%;
+            animation: gradient 6s ease infinite;
+        }
+        
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .tools-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .ad-button {
+                padding: 14px 28px;
+                font-size: 16px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .tools-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Glassmorphism Header -->
+    <header class="header fixed w-full py-4 px-6 z-50">
+        <div class="max-w-6xl mx-auto flex justify-center items-center">
+            <div class="flex items-center space-x-2">
+                <span class="text-3xl">🧠</span>
+                <h1 class="text-2xl logo">MindForge</h1>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero pt-32 pb-20 px-6">
+        <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 animate__animated animate__fadeInDown">
+                Welcome to MindForge Tools
+            </h1>
+            <div class="typing-container">
+                <p class="typing-text active">25 Unique Tools to Test Your Brain...</p>
+                <p class="typing-text">NEET, JEE, UPSC, Everyone Can Benefit...</p>
+                <p class="typing-text">Boost Focus. Defeat Stress. Track Life.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ==================== BRAIN TOOLS ==================== -->
+    <section class="max-w-6xl mx-auto px-6 py-16">
+        <div class="flex items-center space-x-3 mb-8">
+            <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xl">
+                🧠
+            </div>
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                Brain Tools
+            </h2>
+        </div>
+        
+        <p class="text-gray-600 mb-8 max-w-2xl">
+            Scientifically-designed tools to enhance memory, focus, and cognitive performance.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Tool 1 - Memory Matrix -->
+            <div class="tool-card p-6">
+                <div class="tool-icon bg-indigo-100 text-indigo-600">
+                    🧩
+                </div>
+                <h3 class="text-xl font-bold mb-3">Memory Matrix</h3>
+                <p class="text-gray-500 mb-6">Challenge your short-term memory with pattern recognition tasks.</p>
+                <button class="ad-button" id="memoryMatrixButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+            
+            <!-- Tool 2 - Focus Blitz -->
+            <div class="tool-card p-6" style="transition-delay: 0.1s">
+                <div class="tool-icon bg-blue-100 text-blue-600">
+                    ⚡
+                </div>
+                <h3 class="text-xl font-bold mb-3">Focus Blitz</h3>
+                <p class="text-gray-500 mb-6">Timed concentration drills with increasing difficulty.</p>
+                <button class="ad-button" id="focusBlitzButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+            
+            <!-- Tool 3 - Dual N-Back Pro -->
+            <div class="tool-card p-6" style="transition-delay: 0.2s">
+                <div class="tool-icon bg-purple-100 text-purple-600">
+                    🔢
+                </div>
+                <h3 class="text-xl font-bold mb-3">Dual N-Back Pro</h3>
+                <p class="text-gray-500 mb-6">Gold standard working memory training.</p>
+                <button class="ad-button" id="dualNBackButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Ad Space -->
+        <div class="ad-space mt-12">
+            <p class="text-gray-500">Advertisement Space (728x90)</p>
+        </div>
+    </section>
+
+    <!-- ==================== STUDY TOOLS ==================== -->
+    <section class="max-w-6xl mx-auto px-6 py-16">
+        <div class="flex items-center space-x-3 mb-8">
+            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xl">
+                📚
+            </div>
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
+                Study Tools
+            </h2>
+        </div>
+        
+        <p class="text-gray-600 mb-8 max-w-2xl">
+            Specialized tools for students preparing for competitive exams.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Tool 1 -->
+            <div class="tool-card p-6">
+                <div class="tool-icon bg-green-100 text-green-600">
+                    🧬
+                </div>
+                <h3 class="text-xl font-bold mb-3">NEET Biology Master</h3>
+                <p class="text-gray-500 mb-6">Daily MCQs with NCERT-aligned explanations.</p>
+                <button class="ad-button" id="neetBioButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+            
+            <!-- Tool 2 -->
+            <div class="tool-card p-6" style="transition-delay: 0.1s">
+                <div class="tool-icon bg-teal-100 text-teal-600">
+                    ∫
+                </div>
+                <h3 class="text-xl font-bold mb-3">JEE Math Sprint</h3>
+                <p class="text-gray-500 mb-6">Timed problem sets with video solutions.</p>
+                <button class="ad-button" id="jeeMathButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+            
+            <!-- Tool 3 -->
+            <div class="tool-card p-6" style="transition-delay: 0.2s">
+                <div class="tool-icon bg-emerald-100 text-emerald-600">
+                    🗞️
+                </div>
+                <h3 class="text-xl font-bold mb-3">UPSC Current+</h3>
+                <p class="text-gray-500 mb-6">Daily news analysis with mock tests.</p>
+                <button class="ad-button" id="upscCurrentButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Ad Space -->
+        <div class="ad-space mt-12">
+            <p class="text-gray-500">Advertisement Space (728x90)</p>
+        </div>
+    </section>
+
+    <!-- ==================== FOCUS TOOLS ==================== -->
+    <section class="max-w-6xl mx-auto px-6 py-16">
+        <div class="flex items-center space-x-3 mb-8">
+            <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xl">
+                ⚡
+            </div>
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
+                Focus Tools
+            </h2>
+        </div>
+        
+        <p class="text-gray-600 mb-8 max-w-2xl">
+            Train your mind to resist distractions and enter flow states.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Tool 1 -->
+            <div class="tool-card p-6">
+                <div class="tool-icon bg-amber-100 text-amber-600">
+                    🎯
+                </div>
+                <h3 class="text-xl font-bold mb-3">Deep Focus Mode</h3>
+                <p class="text-gray-500 mb-6">Eliminate digital distractions completely.</p>
+                <button class="ad-button" id="deepFocusButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+            
+            <!-- Tool 2 -->
+            <div class="tool-card p-6" style="transition-delay: 0.1s">
+                <div class="tool-icon bg-orange-100 text-orange-600">
+                    ⏳
+                </div>
+                <h3 class="text-xl font-bold mb-3">Pomodoro Pro</h3>
+                <p class="text-gray-500 mb-6">Advanced timer with analytics.</p>
+                <button class="ad-button" id="pomodoroButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+            
+            <!-- Tool 3 -->
+            <div class="tool-card p-6" style="transition-delay: 0.2s">
+                <div class="tool-icon bg-red-100 text-red-600">
+                    🚫
+                </div>
+                <h3 class="text-xl font-bold mb-3">Distraction Blocker</h3>
+                <p class="text-gray-500 mb-6">Identify and eliminate focus killers.</p>
+                <button class="ad-button" id="distractionBlockerButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Ad Space -->
+        <div class="ad-space mt-12">
+            <p class="text-gray-500">Advertisement Space (728x90)</p>
+        </div>
+    </section>
+
+    <!-- ==================== STRESS TOOLS ==================== -->
+    <section class="max-w-6xl mx-auto px-6 py-16">
+        <div class="flex items-center space-x-3 mb-8">
+            <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 text-xl">
+                ☠️
+            </div>
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
+                Stress Tools
+            </h2>
+        </div>
+        
+        <p class="text-gray-600 mb-8 max-w-2xl">
+            Build mental resilience against exam pressure and anxiety.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Tool 1 -->
+            <div class="tool-card p-6">
+                <div class="tool-icon bg-pink-100 text-pink-600">
+                    💣
+                </div>
+                <h3 class="text-xl font-bold mb-3">Stress War Mode</h3>
+                <p class="text-gray-500 mb-6">Simulate high-pressure exam conditions.</p>
+                <button class="ad-button" id="stressWarButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+            
+            <!-- Tool 2 -->
+            <div class="tool-card p-6" style="transition-delay: 0.1s">
+                <div class="tool-icon bg-rose-100 text-rose-600">
+                    🧘
+                </div>
+                <h3 class="text-xl font-bold mb-3">Mindfulness Coach</h3>
+                <p class="text-gray-500 mb-6">Guided meditation for students.</p>
+                <button class="ad-button" id="mindfulnessButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+            
+            <!-- Tool 3 -->
+            <div class="tool-card p-6" style="transition-delay: 0.2s">
+                <div class="tool-icon bg-fuchsia-100 text-fuchsia-600">
+                    💤
+                </div>
+                <h3 class="text-xl font-bold mb-3">Sleep Optimizer</h3>
+                <p class="text-gray-500 mb-6">Improve sleep quality for better focus.</p>
+                <button class="ad-button" id="sleepButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Ad Space -->
+        <div class="ad-space mt-12">
+            <p class="text-gray-500">Advertisement Space (728x90)</p>
+        </div>
+    </section>
+
+    <!-- ==================== LIFE TOOLS ==================== -->
+    <section class="max-w-6xl mx-auto px-6 py-16">
+        <div class="flex items-center space-x-3 mb-8">
+            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl">
+                🌱
+            </div>
+            <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
+                Life Tools
+            </h2>
+        </div>
+        
+        <p class="text-gray-600 mb-8 max-w-2xl">
+            Tools for productivity, health, and personal growth.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Tool 1 -->
+            <div class="tool-card p-6">
+                <div class="tool-icon bg-blue-100 text-blue-600">
+                    ⏱️
+                </div>
+                <h3 class="text-xl font-bold mb-3">Death Clock</h3>
+                <p class="text-gray-500 mb-6">Visualize your remaining lifetime.</p>
+                <button class="ad-button" id="deathClockButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+            
+            <!-- Tool 2 -->
+            <div class="tool-card p-6" style="transition-delay: 0.1s">
+                <div class="tool-icon bg-cyan-100 text-cyan-600">
+                    📝
+                </div>
+                <h3 class="text-xl font-bold mb-3">Journal Pro</h3>
+                <p class="text-gray-500 mb-6">Structured journaling for growth.</p>
+                <button class="ad-button" id="journalButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+            
+            <!-- Tool 3 -->
+            <div class="tool-card p-6" style="transition-delay: 0.2s">
+                <div class="tool-icon bg-sky-100 text-sky-600">
+                    🏋️
+                </div>
+                <h3 class="text-xl font-bold mb-3">Habit Forge</h3>
+                <p class="text-gray-500 mb-6">Build lasting habits with science.</p>
+                <button class="ad-button" id="habitButton">
+                    <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- Ad Space -->
+        <div class="ad-space mt-12">
+            <p class="text-gray-500">Advertisement Space (728x90)</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer py-16 px-6 mt-20">
+        <div class="max-w-6xl mx-auto text-center">
+            <div class="flex items-center justify-center space-x-2 mb-6">
+                <span class="text-3xl">🧠</span>
+                <span class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
+                    MindForge
+                </span>
+            </div>
+            <p class="text-gray-400 mb-8 max-w-2xl mx-auto">
+                Premium cognitive tools for students and professionals
+            </p>
+            <p class="text-gray-500 text-sm">© 2023 MindForge. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Popup Overlay (Hidden by default) -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-content">
+            <div class="loading-bar">
+                <div class="progress" id="progressBar"></div>
+            </div>
+            
+            <div class="ad-container">
+                <div class="ad-label">AD</div>
+                
+                <div class="loading-animation" id="loadingAnimation">
+                    <div class="loader"></div>
+                    <div class="loading-text">
+                        Preparing your tool access<br>
+                        Please wait a moment...
+                    </div>
+                </div>
+                
+                <iframe class="ad-frame" id="adFrame" sandbox="allow-forms allow-scripts allow-same-origin"></iframe>
+                
+                <div class="thank-you-notification" id="thankYouNotification">
+                    <i class="fas fa-check-circle" style="margin-right: 8px;"></i>
+                    Thank you for waiting! <span>Tool</span> unlocking soon...
+                </div>
+            </div>
+            
+            <div class="timer-container">
+                <div class="timer" id="timer">
+                    Loading tool: <span class="timer-number" id="timerNumber">45</span>s remaining
+                </div>
+                <button class="skip-btn" id="skipBtn">
+                    SKIP IN <span id="skipCounter">20</span>s
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Text Rotation Animation
+        const texts = document.querySelectorAll('.typing-text');
+        let currentIndex = 0;
+        
+        function rotateText() {
+            // Hide current text
+            texts[currentIndex].classList.remove('active');
+            
+            // Move to next text
+            currentIndex = (currentIndex + 1) % texts.length;
+            
+            // Show next text
+            texts[currentIndex].classList.add('active');
+            
+            // Repeat every 4 seconds
+            setTimeout(rotateText, 4000);
+        }
+        
+        // Start rotation after 2 seconds
+        setTimeout(rotateText, 2000);
+        
+        // Scroll animations for tool cards and ad spaces
+        const animateOnScroll = () => {
+            const elements = document.querySelectorAll('.tool-card, .ad-space');
+            const windowHeight = window.innerHeight;
+            
+            elements.forEach(element => {
+                const elementPosition = element.getBoundingClientRect().top;
+                const elementVisible = 100;
+                
+                if (elementPosition < windowHeight - elementVisible) {
+                    element.classList.add('visible');
+                }
+            });
+        };
+        
+        // Initial check
+        animateOnScroll();
+        
+        // Check on scroll
+        window.addEventListener('scroll', animateOnScroll);
+        
+        // Button click handler
+        function setupButton(buttonId, adLink, nextPage) {
+            const button = document.getElementById(buttonId);
+            if (!button) return;
+            
+            button.addEventListener('click', function() {
+                const popupOverlay = document.getElementById('popupOverlay');
+                const loadingAnimation = document.getElementById('loadingAnimation');
+                const adFrame = document.getElementById('adFrame');
+                const timerNumber = document.getElementById('timerNumber');
+                const skipBtn = document.getElementById('skipBtn');
+                const skipCounter = document.getElementById('skipCounter');
+                const progressBar = document.getElementById('progressBar');
+                const thankYouNotification = document.getElementById('thankYouNotification');
+                
+                // Activate popup
+                popupOverlay.classList.add('active');
+                
+                // Show loading animation
+                loadingAnimation.style.display = 'flex';
+                
+                // Start countdown
+                let countdown;
+                const totalSeconds = 45;
+                const skipAfter = 20;
+                let secondsLeft = totalSeconds;
+                let skipSecondsLeft = skipAfter;
+                
+                timerNumber.textContent = secondsLeft;
+                skipCounter.textContent = skipSecondsLeft;
+                progressBar.style.width = '0%';
+                
+                // Load Adsterra ad after short delay
+                setTimeout(function() {
+                    adFrame.src = adLink;
+                    
+                    adFrame.onload = function() {
+                        setTimeout(function() {
+                            loadingAnimation.classList.add('fade-out');
+                            adFrame.classList.add('loaded');
+                            
+                            setTimeout(function() {
+                                thankYouNotification.classList.add('show');
+                            }, 1500);
+                        }, 500);
+                    };
+                }, 800);
+                
+                // Update skip counter
+                const skipInterval = setInterval(function() {
+                    skipSecondsLeft--;
+                    skipCounter.textContent = skipSecondsLeft;
+                    
+                    if (skipSecondsLeft <= 0) {
+                        clearInterval(skipInterval);
+                        skipBtn.classList.add('visible');
+                    }
+                }, 1000);
+                
+                // Update timer and progress
+                countdown = setInterval(function() {
+                    secondsLeft--;
+                    
+                    // Animate number change
+                    timerNumber.style.opacity = '0';
+                    timerNumber.style.transform = 'translateY(-5px)';
+                    
+                    setTimeout(() => {
+                        timerNumber.textContent = secondsLeft;
+                        timerNumber.style.opacity = '1';
+                        timerNumber.style.transform = 'translateY(0)';
+                    }, 300);
+                    
+                    progressBar.style.width = `${((totalSeconds - secondsLeft) / totalSeconds) * 100}%`;
+                    
+                    if (secondsLeft <= 0) {
+                        clearInterval(countdown);
+                        redirectToTool();
+                    }
+                }, 1000);
+                
+                // Skip button functionality
+                skipBtn.addEventListener('click', function() {
+                    clearInterval(countdown);
+                    redirectToTool();
+                });
+                
+                function redirectToTool() {
+                    popupOverlay.style.opacity = '0';
+                    setTimeout(function() {
+                        window.location.href = nextPage;
+                    }, 800);
+                }
+            });
+        }
+        
+        // Setup all buttons with the correct ad link and tool page
+        setupButton('memoryMatrixButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('focusBlitzButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('dualNBackButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('neetBioButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('jeeMathButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('upscCurrentButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('deepFocusButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('pomodoroButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('distractionBlockerButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('stressWarButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('mindfulnessButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('sleepButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('deathClockButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('journalButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        setupButton('habitButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+    </script>
+</body>
+</html>
