@@ -827,7 +827,7 @@
                 <div class="tool-icon bg-cyan-100 text-cyan-600">
                     📝
                 </div>
-                <h3 class="text-xl font-bold mb-3">Life Summary</h3>
+                <h3 class="text-xl font-bold mb-3">Journal Pro</h3>
                 <p class="text-gray-500 mb-6">Structured journaling for growth.</p>
                 <button class="ad-button" id="journalButton">
                     <span><i class="fas fa-lock-open" style="margin-right: 12px;"></i> UNLOCK TOOL</span>
@@ -921,23 +921,14 @@
         let currentIndex = 0;
         
         function rotateText() {
-            // Hide current text
             texts[currentIndex].classList.remove('active');
-            
-            // Move to next text
             currentIndex = (currentIndex + 1) % texts.length;
-            
-            // Show next text
             texts[currentIndex].classList.add('active');
-            
-            // Repeat every 4 seconds
             setTimeout(rotateText, 4000);
         }
-        
-        // Start rotation after 2 seconds
         setTimeout(rotateText, 2000);
         
-        // Scroll animations for tool cards and ad spaces
+        // Scroll animations
         const animateOnScroll = () => {
             const elements = document.querySelectorAll('.tool-card, .ad-space');
             const windowHeight = window.innerHeight;
@@ -951,15 +942,36 @@
                 }
             });
         };
-        
-        // Initial check
         animateOnScroll();
-        
-        // Check on scroll
         window.addEventListener('scroll', animateOnScroll);
         
+        // AD LINK CONFIGURATION - YOU CAN CHANGE THESE LINKS
+        const adLinks = {
+            popupAd: 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590',
+            bannerAd: '//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.js'
+        };
+
+        // TOOL LINKS CONFIGURATION - YOU CAN CHANGE THESE PATHS
+        const toolPages = {
+            memoryMatrix: 'memory-matrix.html',
+            focusBlitz: 'focus-blitz.html',
+            dualNBack: 'dual-nback.html',
+            neetBio: 'neet-biology.html',
+            jeeMath: 'jee-math.html',
+            upscCurrent: 'upsc-current.html',
+            deepFocus: 'deep-focus.html',
+            pomodoro: 'pomodoro.html',
+            distractionBlocker: 'distraction-blocker.html',
+            stressWar: 'stress-war.html',
+            mindfulness: 'mindfulness.html',
+            sleep: 'sleep.html',
+            deathClock: 'death-clock.html',
+            journal: 'journal.html',
+            habit: 'habit.html'
+        };
+
         // Button click handler
-        function setupButton(buttonId, adLink, nextPage) {
+        function setupButton(buttonId, toolName) {
             const button = document.getElementById(buttonId);
             if (!button) return;
             
@@ -973,10 +985,11 @@
                 const progressBar = document.getElementById('progressBar');
                 const thankYouNotification = document.getElementById('thankYouNotification');
                 
+                // Update thank you message with tool name
+                thankYouNotification.querySelector('span').textContent = toolName.replace(/-/g, ' ');
+                
                 // Activate popup
                 popupOverlay.classList.add('active');
-                
-                // Show loading animation
                 loadingAnimation.style.display = 'flex';
                 
                 // Start countdown
@@ -990,15 +1003,14 @@
                 skipCounter.textContent = skipSecondsLeft;
                 progressBar.style.width = '0%';
                 
-                // Load Adsterra ad after short delay
+                // Load Ad
                 setTimeout(function() {
-                    adFrame.src = adLink;
+                    adFrame.src = adLinks.popupAd;
                     
                     adFrame.onload = function() {
                         setTimeout(function() {
                             loadingAnimation.classList.add('fade-out');
                             adFrame.classList.add('loaded');
-                            
                             setTimeout(function() {
                                 thankYouNotification.classList.add('show');
                             }, 1500);
@@ -1021,7 +1033,6 @@
                 countdown = setInterval(function() {
                     secondsLeft--;
                     
-                    // Animate number change
                     timerNumber.style.opacity = '0';
                     timerNumber.style.transform = 'translateY(-5px)';
                     
@@ -1035,41 +1046,41 @@
                     
                     if (secondsLeft <= 0) {
                         clearInterval(countdown);
-                        redirectToTool();
+                        redirectToTool(toolName);
                     }
                 }, 1000);
                 
                 // Skip button functionality
                 skipBtn.addEventListener('click', function() {
                     clearInterval(countdown);
-                    redirectToTool();
+                    redirectToTool(toolName);
                 });
                 
-                function redirectToTool() {
+                function redirectToTool(tool) {
                     popupOverlay.style.opacity = '0';
                     setTimeout(function() {
-                        window.location.href = nextPage;
+                        window.location.href = toolPages[tool] || 'index.html';
                     }, 800);
                 }
             });
         }
         
-        // Setup all buttons with the correct ad link and tool page
-        setupButton('memoryMatrixButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('focusBlitzButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('dualNBackButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('neetBioButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('jeeMathButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('upscCurrentButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('deepFocusButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('pomodoroButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('distractionBlockerButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('stressWarButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('mindfulnessButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('sleepButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
-        setupButton('deathClockButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', '/MindForge/life-summary.html');
-        setupButton('lifesummaryButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', '/');
-        setupButton('habitButton', 'https://www.profitableratecpm.com/vpnhf5ktk?key=adeadc347c07465312f282610b514590', 'https://learnorix.odoo.com/pro-course');
+        // Setup all buttons with their respective tool pages
+        setupButton('memoryMatrixButton', 'memoryMatrix');
+        setupButton('focusBlitzButton', 'focusBlitz');
+        setupButton('dualNBackButton', 'dualNBack');
+        setupButton('neetBioButton', 'neetBio');
+        setupButton('jeeMathButton', 'jeeMath');
+        setupButton('upscCurrentButton', 'upscCurrent');
+        setupButton('deepFocusButton', 'deepFocus');
+        setupButton('pomodoroButton', 'pomodoro');
+        setupButton('distractionBlockerButton', 'distractionBlocker');
+        setupButton('stressWarButton', 'stressWar');
+        setupButton('mindfulnessButton', 'mindfulness');
+        setupButton('sleepButton', 'sleep');
+        setupButton('deathClockButton', 'deathClock');
+        setupButton('journalButton', 'journal');
+        setupButton('habitButton', 'habit');
     </script>
 </body>
 </html>
