@@ -34,6 +34,7 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
+            min-height: 0;
         }
         
         #game-area {
@@ -105,19 +106,21 @@
             overflow-y: auto;
             display: flex;
             flex-direction: column;
-            height: 40vh;
+            height: 45vh;
         }
         
         .stats-content {
             overflow-y: auto;
             flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
         
         .stat-card {
             background-color: #252525;
             padding: 12px;
             border-radius: 8px;
-            margin-bottom: 12px;
         }
         
         .stat-value {
@@ -187,6 +190,7 @@
             
             #controls {
                 gap: 6px;
+                padding: 8px 10px;
             }
             
             #speed-slider {
@@ -200,7 +204,16 @@
             }
             
             #stats-panel {
-                height: 35vh;
+                height: 45vh;
+                padding: 12px;
+            }
+            
+            .stat-card {
+                padding: 10px;
+            }
+            
+            #radar-container {
+                height: 180px;
             }
         }
     </style>
@@ -219,23 +232,23 @@
         </div>
         
         <div id="stats-panel">
-            <h2 style="margin-top: 0;">Session Report</h2>
+            <h2 style="margin: 0 0 12px 0; font-size: 1.2rem;">Session Report</h2>
             <div class="stats-content">
                 <div class="stat-card">
-                    <h3 style="margin: 0 0 8px 0;">Average Reaction Time</h3>
+                    <h3 style="margin: 0 0 8px 0; font-size: 1rem;">Average Reaction Time</h3>
                     <div class="stat-value" id="avg-reaction">-- ms</div>
                     <div id="reaction-feedback" style="font-size: 13px;">Start playing to measure</div>
                 </div>
                 
                 <div class="stat-card">
-                    <h3 style="margin: 0 0 8px 0;">Focus Performance</h3>
+                    <h3 style="margin: 0 0 8px 0; font-size: 1rem;">Focus Performance</h3>
                     <div id="radar-container">
                         <canvas id="radar-chart"></canvas>
                     </div>
                 </div>
                 
                 <div class="stat-card">
-                    <h3 style="margin: 0 0 8px 0;">Distractions</h3>
+                    <h3 style="margin: 0 0 8px 0; font-size: 1rem;">Distractions</h3>
                     <div class="stat-value" id="distractions">0</div>
                     <div style="font-size: 13px;">Times you looked away</div>
                 </div>
@@ -328,7 +341,8 @@
                             color: '#e0e0e0',
                             font: {
                                 size: window.innerWidth < 480 ? 10 : 12
-                            }
+                            },
+                            boxWidth: 12
                         }
                     }
                 }
@@ -348,11 +362,6 @@
         window.addEventListener('resize', function() {
             radarChart.update();
         });
-        
-        // Prevent sidebar from scrolling when touching game area
-        gameArea.addEventListener('touchstart', function(e) {
-            e.stopPropagation();
-        }, { passive: false });
         
         // Game functions
         function toggleGame() {
@@ -420,6 +429,11 @@
                 Math.min(10, sessionDuration / 30)
             ];
             radarChart.update();
+            
+            // Scroll stats into view on mobile
+            if (window.innerWidth < 768) {
+                document.getElementById('stats-panel').scrollTo(0, 0);
+            }
         }
         
         function updateTimer() {
