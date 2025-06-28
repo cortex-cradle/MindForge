@@ -2,23 +2,36 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Focus Blitz</title>
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+        
         body {
             margin: 0;
             padding: 0;
             background-color: #121212;
             color: #e0e0e0;
-            font-family: 'Segoe UI', sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             overflow: hidden;
-            display: flex;
             height: 100vh;
+            touch-action: manipulation;
+        }
+        
+        #main-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            width: 100%;
         }
         
         #game-container {
             flex: 1;
             position: relative;
+            overflow: hidden;
             display: flex;
             flex-direction: column;
         }
@@ -27,7 +40,7 @@
             flex: 1;
             position: relative;
             overflow: hidden;
-            cursor: crosshair;
+            touch-action: manipulation;
         }
         
         .target {
@@ -39,27 +52,24 @@
             box-shadow: 0 0 15px #00b4ff, inset 0 0 5px rgba(255, 255, 255, 0.5);
             transform: translate(-50%, -50%);
             transition: transform 0.1s;
-        }
-        
-        .target:hover {
-            transform: translate(-50%, -50%) scale(1.1);
-        }
-        
-        .target:active {
-            transform: translate(-50%, -50%) scale(0.9);
+            touch-action: manipulation;
         }
         
         #controls {
-            padding: 15px;
+            padding: 10px 15px;
             display: flex;
             align-items: center;
             background-color: #1e1e1e;
             border-top: 1px solid #333;
+            flex-wrap: wrap;
+            gap: 8px;
+            flex-shrink: 0;
         }
         
         #speed-slider {
             flex: 1;
-            margin: 0 15px;
+            min-width: 100px;
+            margin: 0 10px;
             -webkit-appearance: none;
             height: 6px;
             background: #333;
@@ -82,31 +92,36 @@
             padding: 8px 16px;
             border-radius: 4px;
             cursor: pointer;
-            margin: 0 5px;
+            font-size: 14px;
             transition: background-color 0.2s;
-        }
-        
-        button:hover {
-            background-color: #00b4ff;
+            touch-action: manipulation;
+            flex-shrink: 0;
         }
         
         #stats-panel {
-            width: 300px;
             background-color: #1e1e1e;
-            padding: 20px;
-            border-left: 1px solid #333;
+            padding: 15px;
+            border-top: 1px solid #333;
             overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            height: 40vh;
+        }
+        
+        .stats-content {
+            overflow-y: auto;
+            flex: 1;
         }
         
         .stat-card {
             background-color: #252525;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
         }
         
         .stat-value {
-            font-size: 24px;
+            font-size: 22px;
             color: #00b4ff;
             margin: 5px 0;
         }
@@ -126,62 +141,112 @@
             align-items: center;
             justify-content: center;
             background-color: #252525;
-            margin-top: 20px;
+            margin-top: auto;
             overflow: hidden;
+            width: 100%;
+            flex-shrink: 0;
         }
         
-        canvas {
-            width: 100%;
+        #radar-container {
             height: 200px;
+            width: 100%;
+            position: relative;
         }
 
-        @media (max-width: 768px) {
-            #stats-panel {
-                display: none;
+        #timer, #score {
+            font-size: 14px;
+            min-width: 60px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        @media (min-width: 768px) {
+            #main-container {
+                flex-direction: row;
             }
+            
             #game-container {
-                width: 100%;
+                flex: 2;
+            }
+            
+            #stats-panel {
+                flex: 1;
+                width: 300px;
+                max-width: 300px;
+                border-top: none;
+                border-left: 1px solid #333;
+                height: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .target {
+                width: 35px;
+                height: 35px;
+            }
+            
+            #controls {
+                gap: 6px;
+            }
+            
+            #speed-slider {
+                min-width: 80px;
+                margin: 0 5px;
+            }
+            
+            #timer, #score {
+                font-size: 13px;
+                min-width: 50px;
+            }
+            
+            #stats-panel {
+                height: 35vh;
             }
         }
     </style>
 </head>
 <body>
-    <div id="game-container">
-        <div id="game-area"></div>
-        <div id="controls">
-            <button id="start-btn">Start</button>
-            <span>Speed:</span>
-            <input type="range" id="speed-slider" min="1" max="10" value="5">
-            <span id="timer">00:00</span>
-            <span id="score">0 hits</span>
-        </div>
-    </div>
-    
-    <div id="stats-panel">
-        <h2>Session Report</h2>
-        <div class="stat-card">
-            <h3>Average Reaction Time</h3>
-            <div class="stat-value" id="avg-reaction">-- ms</div>
-            <div id="reaction-feedback">Start playing to measure</div>
+    <div id="main-container">
+        <div id="game-container">
+            <div id="game-area"></div>
+            <div id="controls">
+                <button id="start-btn">Start</button>
+                <span>Speed:</span>
+                <input type="range" id="speed-slider" min="1" max="10" value="5">
+                <span id="timer">00:00</span>
+                <span id="score">0 hits</span>
+            </div>
         </div>
         
-        <div class="stat-card">
-            <h3>Focus Performance</h3>
-            <canvas id="radar-chart"></canvas>
+        <div id="stats-panel">
+            <h2 style="margin-top: 0;">Session Report</h2>
+            <div class="stats-content">
+                <div class="stat-card">
+                    <h3 style="margin: 0 0 8px 0;">Average Reaction Time</h3>
+                    <div class="stat-value" id="avg-reaction">-- ms</div>
+                    <div id="reaction-feedback" style="font-size: 13px;">Start playing to measure</div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3 style="margin: 0 0 8px 0;">Focus Performance</h3>
+                    <div id="radar-container">
+                        <canvas id="radar-chart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="stat-card">
+                    <h3 style="margin: 0 0 8px 0;">Distractions</h3>
+                    <div class="stat-value" id="distractions">0</div>
+                    <div style="font-size: 13px;">Times you looked away</div>
+                </div>
+            </div>
+            
+            <!-- Adsterra Ad Code -->
+            <div id="ad-space">
+                <script async="async" data-cfasync="false" src="//pl27029569.profitableratecpm.com/92ebd279d167fcd8db525b95933a1c2d/invoke.js"></script>
+                <div id="container-92ebd279d167fcd8db525b95933a1c2d"></div>
+            </div>
         </div>
-        
-        <div class="stat-card">
-            <h3>Distractions</h3>
-            <div class="stat-value" id="distractions">0</div>
-            <div>Times you looked away</div>
-        </div>
-        
-        <!-- Adsterra Ad Code Start -->
-        <div id="ad-space">
-            <script async="async" data-cfasync="false" src="//pl27029569.profitableratecpm.com/92ebd279d167fcd8db525b95933a1c2d/invoke.js"></script>
-            <div id="container-92ebd279d167fcd8db525b95933a1c2d"></div>
-        </div>
-        <!-- Adsterra Ad Code End -->
     </div>
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -197,7 +262,8 @@
         let maxStreak = 0;
         let speed = 5;
         let timerInterval;
-        let lastMouseMoveTime = Date.now();
+        let lastInteractionTime = Date.now();
+        let currentTarget = null;
         
         // DOM elements
         const gameArea = document.getElementById('game-area');
@@ -208,6 +274,7 @@
         const avgReactionDisplay = document.getElementById('avg-reaction');
         const reactionFeedback = document.getElementById('reaction-feedback');
         const distractionsDisplay = document.getElementById('distractions');
+        const statsContent = document.querySelector('.stats-content');
         
         // Initialize radar chart
         const radarCtx = document.getElementById('radar-chart').getContext('2d');
@@ -231,15 +298,25 @@
                 }]
             },
             options: {
+                responsive: true,
+                maintainAspectRatio: false,
                 scales: {
                     r: {
                         angleLines: { color: '#333' },
                         grid: { color: '#333' },
-                        pointLabels: { color: '#e0e0e0' },
+                        pointLabels: { 
+                            color: '#e0e0e0',
+                            font: {
+                                size: window.innerWidth < 480 ? 10 : 12
+                            }
+                        },
                         ticks: {
                             backdropColor: 'transparent',
                             color: '#777',
-                            showLabelBackdrop: false
+                            showLabelBackdrop: false,
+                            font: {
+                                size: window.innerWidth < 480 ? 8 : 10
+                            }
                         },
                         suggestedMin: 0,
                         suggestedMax: 10
@@ -247,7 +324,12 @@
                 },
                 plugins: {
                     legend: {
-                        labels: { color: '#e0e0e0' }
+                        labels: { 
+                            color: '#e0e0e0',
+                            font: {
+                                size: window.innerWidth < 480 ? 10 : 12
+                            }
+                        }
                     }
                 }
             }
@@ -256,7 +338,21 @@
         // Event listeners
         startBtn.addEventListener('click', toggleGame);
         speedSlider.addEventListener('input', updateSpeed);
-        gameArea.addEventListener('mousemove', trackActivity);
+        
+        // Track both mouse and touch interactions
+        gameArea.addEventListener('mousemove', trackInteraction);
+        gameArea.addEventListener('touchmove', trackInteraction, { passive: false });
+        gameArea.addEventListener('touchstart', trackInteraction, { passive: false });
+        
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            radarChart.update();
+        });
+        
+        // Prevent sidebar from scrolling when touching game area
+        gameArea.addEventListener('touchstart', function(e) {
+            e.stopPropagation();
+        }, { passive: false });
         
         // Game functions
         function toggleGame() {
@@ -290,7 +386,11 @@
         function endGame() {
             gameActive = false;
             clearInterval(timerInterval);
-            gameArea.innerHTML = '';
+            
+            if (currentTarget) {
+                currentTarget.remove();
+                currentTarget = null;
+            }
             
             // Update stats
             const avgReaction = hits > 0 ? Math.round(totalReactionTime / hits) : 0;
@@ -333,15 +433,19 @@
             speed = parseInt(speedSlider.value);
         }
         
-        function trackActivity() {
-            lastMouseMoveTime = Date.now();
+        function trackInteraction(e) {
+            // Prevent scrolling on touch devices
+            if (e.type === 'touchmove' || e.type === 'touchstart') {
+                e.preventDefault();
+            }
+            lastInteractionTime = Date.now();
         }
         
         function checkDistraction() {
             if (!gameActive) return;
             
             const now = Date.now();
-            if (now - lastMouseMoveTime > 2000) { // 2 seconds of inactivity
+            if (now - lastInteractionTime > 2000) { // 2 seconds of inactivity
                 distractions++;
                 distractionsDisplay.textContent = distractions;
                 streak = 0;
@@ -351,17 +455,22 @@
         function spawnTarget() {
             if (!gameActive) return;
             
+            // Remove existing target if any
+            if (currentTarget) {
+                currentTarget.remove();
+            }
+            
             targetCount++;
-            const target = document.createElement('div');
-            target.className = 'target';
+            currentTarget = document.createElement('div');
+            currentTarget.className = 'target';
             
             // Random position with margin
             const margin = 50;
             const x = margin + Math.random() * (gameArea.offsetWidth - 2 * margin);
             const y = margin + Math.random() * (gameArea.offsetHeight - 2 * margin);
             
-            target.style.left = `${x}px`;
-            target.style.top = `${y}px`;
+            currentTarget.style.left = `${x}px`;
+            currentTarget.style.top = `${y}px`;
             
             // Parabolic motion
             const amplitude = 50 + Math.random() * 100;
@@ -372,7 +481,7 @@
             let lastFrameTime = spawnTime;
             
             function animate() {
-                if (!gameActive) return;
+                if (!gameActive || !currentTarget) return;
                 
                 const now = Date.now();
                 const deltaTime = now - lastFrameTime;
@@ -381,17 +490,23 @@
                 phase += frequency * deltaTime;
                 const offsetY = amplitude * Math.sin(phase);
                 
-                target.style.transform = `translate(-50%, -50%) translateY(${offsetY}px)`;
+                currentTarget.style.transform = `translate(-50%, -50%) translateY(${offsetY}px)`;
                 
                 requestAnimationFrame(animate);
             }
             
             animate();
             
-            target.addEventListener('click', function(e) {
-                if (!gameActive) return;
+            // Handle both mouse and touch events
+            currentTarget.addEventListener('click', handleTargetClick);
+            currentTarget.addEventListener('touchend', handleTargetClick);
+            
+            function handleTargetClick(e) {
+                if (!gameActive || !currentTarget) return;
                 
+                e.preventDefault();
                 e.stopPropagation();
+                
                 const reactionTime = Date.now() - spawnTime;
                 totalReactionTime += reactionTime;
                 hits++;
@@ -413,16 +528,18 @@
                     createConfetti(x, y);
                 }
                 
-                target.remove();
+                currentTarget.remove();
+                currentTarget = null;
                 setTimeout(spawnTarget, 500 + Math.random() * 1000 / speed);
-            });
+            }
             
-            gameArea.appendChild(target);
+            gameArea.appendChild(currentTarget);
             
             // Auto-remove after some time if not clicked
             setTimeout(() => {
-                if (target.parentNode) {
-                    target.remove();
+                if (currentTarget && currentTarget.parentNode) {
+                    currentTarget.remove();
+                    currentTarget = null;
                     streak = 0;
                     setTimeout(spawnTarget, 500 + Math.random() * 1000 / speed);
                 }
