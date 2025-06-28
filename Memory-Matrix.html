@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Matrix Game</title>
+    <style>
+        :root {
+            --primary: #B3D9FF;
+            --secondary: #E6F3FF;
+            --accent: #4DA6FF;
+            --text: #333333;
+            --correct: #4CAF50;
+            --incorrect: #F44336;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+        
+        body {
+            background-color: white;
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+        
+        .game-container {
+            width: 100%;
+            max-width: 500px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 15px;
+            background-color: var(--secondary);
+            border-radius: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        select, button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            background-color: var(--primary);
+            color: var(--text);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+        }
+        
+        .grid {
+            display: grid;
+            gap: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .tile {
+            aspect-ratio: 1;
+            background-color: var(--secondary);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .tile:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .tile.highlighted {
+            background-color: var(--accent);
+        }
+        
+        .tile.correct {
+            background-color: var(--correct);
+            animation: pulse 0.5s;
+        }
+        
+        .tile.incorrect {
+            background-color: var(--incorrect);
+            animation: shake 0.5s;
+        }
+        
+        .stats {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background-color: var(--secondary);
+            padding: 10px 15px;
+            border-radius: 8px;
+            text-align: center;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        
+        .results {
+            width: 100%;
+            background-color: var(--secondary);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .progress-graph {
+            height: 150px;
+            margin: 20px 0;
+            background-color: white;
+            border-radius: 5px;
+            position: relative;
+        }
+        
+        .ad-container {
+            width: 100%;
+            margin: 15px 0;
+            text-align: center;
+            overflow: hidden;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        .particle {
+            position: absolute;
+            background-color: var(--correct);
+            border-radius: 50%;
+            pointer-events: none;
+            animation: float 1s ease-out forwards;
+        }
+        
+        @keyframes float {
+            to {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Top Ad Banner -->
+    <div class="ad-container">
+        <script type="text/javascript">
+            atOptions = {
+                'key' : '43e2bb13f24806c283fb098cfdb2d204',
+                'format' : 'iframe',
+                'height' : 90,
+                'width' : 728,
+                'params' : {}
+            };
+        </script>
+        <script type="text/javascript" src="//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.js"></script>
+    </div>
+
+    <header>
+        <h1>Memory Matrix</h1>
+        <p>Test your short-term memory by recalling highlighted grids</p>
+    </header>
+    
+    <div class="game-container">
+        <div class="controls">
+            <div>
+                <label for="grid-size">Grid Size:</label>
+                <select id="grid-size">
+                    <option value="3">3x3</option>
+                    <option value="4">4x4</option>
+                    <option value="5">5x5</option>
+                    <option value="6">6x6</option>
+                </select>
+            </div>
+            <button id="start-btn">Start Game</button>
+        </div>
+        
+        <div class="stats">
+            <div class="stat-box">
+                <div>Level</div>
+                <div id="level">1</div>
+            </div>
+            <div class="stat-box">
+                <div>Score</div>
+                <div id="score">0</div>
+            </div>
+            <div class="stat-box">
+                <div>Time Left</div>
+                <div id="timer">30</div>
+            </div>
+        </div>
+        
+        <div class="grid" id="game-grid"></div>
+        
+        <!-- Bottom Ad Banner -->
+        <div class="ad-container">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '43e2bb13f24806c283fb098cfdb2d204',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.js"></script>
+        </div>
+        
+        <div class="results" id="results">
+            <h2>Game Results</h2>
+            <div id="percentile">Your memory is stronger than 0% of users!</div>
+            <div class="progress-graph" id="progress-graph"></div>
+            <button id="replay-btn">Replay Mistakes</button>
+        </div>
+    </div>
+
+    <script>
+        // Game Variables
+        let currentLevel = 1;
+        let score = 0;
+        let timeLeft = 30;
+        let timer;
+        let highlightedTiles = [];
+        let correctTiles = [];
+        let gameHistory = [];
+        let isMemorizing = false;
+        let isGameActive = false;
+        
+        // DOM Elements
+        const gameGrid = document.getElementById('game-grid');
+        const startBtn = document.getElementById('start-btn');
+        const gridSizeSelect = document.getElementById('grid-size');
+        const levelDisplay = document.getElementById('level');
+        const scoreDisplay = document.getElementById('score');
+        const timerDisplay = document.getElementById('timer');
+        const resultsPanel = document.getElementById('results');
+        const percentileDisplay = document.getElementById('percentile');
+        const progressGraph = document.getElementById('progress-graph');
+        const replayBtn = document.getElementById('replay-btn');
+        
+        // Event Listeners
+        startBtn.addEventListener('click', startGame);
+        replayBtn.addEventListener('click', replayMistakes);
+        
+        // Initialize Grid
+        function initializeGrid(size) {
+            gameGrid.innerHTML = '';
+            gameGrid.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+            
+            for (let i = 0; i < size * size; i++) {
+                const tile = document.createElement('div');
+                tile.className = 'tile';
+                tile.dataset.index = i;
+                tile.addEventListener('click', handleTileClick);
+                gameGrid.appendChild(tile);
+            }
+        }
+        
+        // Start Game
+        function startGame() {
+            const size = parseInt(gridSizeSelect.value);
+            currentLevel = 1;
+            score = 0;
+            gameHistory = [];
+            
+            levelDisplay.textContent = currentLevel;
+            scoreDisplay.textContent = score;
+            
+            initializeGrid(size);
+            startRound();
+            isGameActive = true;
+            resultsPanel.style.display = 'none';
+        }
+        
+        // Start Round
+        function startRound() {
+            const size = parseInt(gridSizeSelect.value);
+            highlightedTiles = [];
+            correctTiles = [];
+            
+            // Determine number of tiles to highlight
+            const tilesToHighlight = Math.min(currentLevel + 1, size * size);
+            
+            // Randomly select tiles
+            while (highlightedTiles.length < tilesToHighlight) {
+                const randomIndex = Math.floor(Math.random() * size * size);
+                if (!highlightedTiles.includes(randomIndex)) {
+                    highlightedTiles.push(randomIndex);
+                }
+            }
+            
+            // Show highlighted tiles
+            isMemorizing = true;
+            highlightedTiles.forEach(index => {
+                gameGrid.children[index].classList.add('highlighted');
+            });
+            
+            // Hide tiles after delay
+            setTimeout(() => {
+                highlightedTiles.forEach(index => {
+                    gameGrid.children[index].classList.remove('highlighted');
+                });
+                isMemorizing = false;
+                startTimer();
+            }, 1500);
+        }
+        
+        // Handle Tile Click
+        function handleTileClick(e) {
+            if (isMemorizing || !isGameActive) return;
+            
+            const tile = e.target;
+            const index = parseInt(tile.dataset.index);
+            
+            if (highlightedTiles.includes(index) && !correctTiles.includes(index)) {
+                // Correct
+                tile.classList.add('correct');
+                correctTiles.push(index);
+                score += 10 * currentLevel;
+                scoreDisplay.textContent = score;
+                createParticles(tile);
+                
+                // Check if round complete
+                if (correctTiles.length === highlightedTiles.length) {
+                    clearInterval(timer);
+                    setTimeout(() => {
+                        currentLevel++;
+                        levelDisplay.textContent = currentLevel;
+                        startRound();
+                    }, 1000);
+                }
+            } else if (!highlightedTiles.includes(index)) {
+                // Incorrect
+                tile.classList.add('incorrect');
+                score = Math.max(0, score - 5);
+                scoreDisplay.textContent = score;
+            }
+        }
+        
+        // Timer
+        function startTimer() {
+            timeLeft = 30;
+            timerDisplay.textContent = timeLeft;
+            
+            clearInterval(timer);
+            timer = setInterval(() => {
+                timeLeft--;
+                timerDisplay.textContent = timeLeft;
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timer);
+                    endGame();
+                }
+            }, 1000);
+        }
+        
+        // End Game
+        function endGame() {
+            isGameActive = false;
+            clearInterval(timer);
+            
+            // Calculate accuracy
+            const accuracy = highlightedTiles.length > 0 
+                ? Math.round((correctTiles.length / highlightedTiles.length) * 100)
+                : 0;
+            
+            // Save game data
+            gameHistory.push({
+                level: currentLevel,
+                score: score,
+                accuracy: accuracy,
+                timestamp: new Date()
+            });
+            
+            // Show results
+            showResults();
+        }
+        
+        // Show Results
+        function showResults() {
+            // Calculate percentile (mock)
+            const percentile = Math.min(100, Math.floor(Math.random() * 30) + 60 + Math.floor(score / 10));
+            percentileDisplay.textContent = `Your memory is stronger than ${percentile}% of users!`;
+            
+            // Draw progress graph
+            drawProgressGraph();
+            
+            resultsPanel.style.display = 'block';
+        }
+        
+        // Draw Progress Graph
+        function drawProgressGraph() {
+            progressGraph.innerHTML = '';
+            
+            // Create canvas
+            const canvas = document.createElement('canvas');
+            canvas.width = progressGraph.clientWidth;
+            canvas.height = progressGraph.clientHeight;
+            progressGraph.appendChild(canvas);
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Draw graph
+            ctx.fillStyle = '#f0f0f0';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            if (gameHistory.length > 0) {
+                const maxScore = Math.max(...gameHistory.map(game => game.score), 100);
+                const segmentWidth = canvas.width / gameHistory.length;
+                
+                ctx.strokeStyle = '#4DA6FF';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+                
+                gameHistory.forEach((game, index) => {
+                    const x = index * segmentWidth + segmentWidth / 2;
+                    const y = canvas.height - (game.score / maxScore) * canvas.height;
+                    
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                    
+                    // Draw point
+                    ctx.fillStyle = '#4DA6FF';
+                    ctx.beginPath();
+                    ctx.arc(x, y, 4, 0, Math.PI * 2);
+                    ctx.fill();
+                });
+                
+                ctx.stroke();
+            }
+        }
+        
+        // Replay Mistakes
+        function replayMistakes() {
+            if (!isGameActive) {
+                const size = parseInt(gridSizeSelect.value);
+                initializeGrid(size);
+                
+                // Show correct tiles
+                highlightedTiles.forEach(index => {
+                    gameGrid.children[index].classList.add('highlighted');
+                });
+                
+                // Hide after delay
+                setTimeout(() => {
+                    highlightedTiles.forEach(index => {
+                        gameGrid.children[index].classList.remove('highlighted');
+                    });
+                }, 3000);
+            }
+        }
+        
+        // Create Particles
+        function createParticles(element) {
+            const rect = element.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            
+            for (let i = 0; i < 10; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.width = `${Math.random() * 8 + 4}px`;
+                particle.style.height = particle.style.width;
+                particle.style.left = `${centerX}px`;
+                particle.style.top = `${centerY}px`;
+                particle.style.backgroundColor = `hsl(${Math.random() * 60 + 120}, 70%, 60%)`;
+                
+                document.body.appendChild(particle);
+                
+                // Remove after animation
+                setTimeout(() => {
+                    particle.remove();
+                }, 1000);
+            }
+        }
+    </script>
+</body>
+</html>
