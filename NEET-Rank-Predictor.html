@@ -127,6 +127,33 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
         }
+
+        /* New button loading styles */
+        .btn-loading {
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .btn-loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                        rgba(255,255,255,0) 0%, 
+                        rgba(255,255,255,0.4) 50%, 
+                        rgba(255,255,255,0) 100%);
+            animation: shine 1.5s infinite;
+        }
+        
+        .btn-disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3) !important;
+        }
         
         .result-container {
             display: none;
@@ -136,6 +163,11 @@
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(20px); }
             to { opacity: 1; transform: translateY(0); }
+        }
+        
+        @keyframes shine {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
         }
         
         /* Perfect Typing Animation */
@@ -148,17 +180,19 @@
             font-weight: 500;
         }
         
-        .typing-text {
+        .typing-container {
             display: inline-block;
             position: relative;
         }
         
-        .typing-text::after {
-            content: '|';
-            position: absolute;
-            right: -8px;
+        .typing-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 1.4rem;
+            background: var(--primary);
             animation: blink 0.7s infinite;
-            color: var(--primary);
+            vertical-align: middle;
+            margin-left: 2px;
         }
         
         @keyframes blink {
@@ -181,12 +215,9 @@
         .score-display {
             font-size: 4.5rem;
             font-weight: 700;
-            background: linear-gradient(45deg, var(--primary), var(--accent));
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
             margin: 10px 0;
             line-height: 1;
+            color: var(--primary); /* Default color */
         }
         
         .score-outof {
@@ -209,7 +240,6 @@
         
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
             width: 0;
             border-radius: 15px;
             transition: width 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
@@ -228,11 +258,6 @@
                       rgba(255,255,255,0.4) 50%, 
                       rgba(255,255,255,0) 100%);
             animation: shine 2s infinite;
-        }
-        
-        @keyframes shine {
-            0% { transform: translateX(-100%); }
-            100% { transform: translateX(100%); }
         }
         
         .progress-labels {
@@ -286,10 +311,11 @@
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, var(--primary), var(--accent));
             transform: scaleX(0);
             transform-origin: left;
             animation: expand 1.5s forwards 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            border-radius: 2px;
+            background: var(--primary);
         }
         
         .topper-line {
@@ -298,15 +324,16 @@
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, var(--danger), #FF8A65);
             transform: scaleX(0);
             transform-origin: left;
             animation: expand 1.5s forwards 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
+            border-radius: 2px;
+            background: var(--danger);
         }
         
         @keyframes expand {
-            from { transform: scaleX(0); }
-            to { transform: scaleX(1); }
+            from { transform: scaleX(0); opacity: 0; }
+            to { transform: scaleX(1); opacity: 1; }
         }
         
         .graph-labels {
@@ -314,6 +341,26 @@
             justify-content: space-between;
             margin-top: 10px;
             color: var(--text-secondary);
+        }
+        
+        .gap-indicator {
+            position: absolute;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: repeating-linear-gradient(90deg, 
+                        transparent, 
+                        transparent 20px, 
+                        var(--danger) 20px, 
+                        var(--danger) 40px);
+            animation: pulseGap 2s infinite;
+            opacity: 0;
+            animation: fadeIn 0.5s forwards 1s;
+        }
+        
+        @keyframes pulseGap {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
         }
         
         /* Analysis Cards */
@@ -342,15 +389,59 @@
             color: var(--accent);
         }
         
-        /* Ad Container */
+        /* Motivational Card */
+        .motivational-card {
+            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(0, 188, 212, 0.1) 100%);
+            border-radius: 15px;
+            padding: 25px;
+            margin: 30px 0;
+            text-align: center;
+            border: 1px solid rgba(33, 150, 243, 0.2);
+        }
+        
+        .quote {
+            font-size: 1.2rem;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+        
+        .author {
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .new-quote-btn {
+            background: rgba(33, 150, 243, 0.1);
+            color: var(--primary-dark);
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .new-quote-btn:hover {
+            background: rgba(33, 150, 243, 0.2);
+        }
+        
+        /* Fixed Ad Container */
         .ad-container {
             background: var(--white);
             border-radius: 10px;
-            padding: 20px;
+            padding: 10px;
             margin: 40px auto;
             max-width: 728px;
             text-align: center;
             box-shadow: var(--card-shadow);
+            overflow: hidden;
+            border: 1px solid rgba(0,0,0,0.1);
+        }
+        
+        .ad-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            margin-bottom: 5px;
         }
         
         @media (max-width: 768px) {
@@ -364,6 +455,10 @@
             
             .welcome-message {
                 font-size: 1.4rem;
+            }
+            
+            .ad-container {
+                padding: 5px;
             }
         }
     </style>
@@ -454,12 +549,14 @@
                     <div class="graph-line"></div>
                     <div class="graph-line"></div>
                     <div class="graph-line"></div>
-                    <div class="user-line"></div>
-                    <div class="topper-line"></div>
+                    <div class="user-line" id="user-line"></div>
+                    <div class="topper-line" id="topper-line"></div>
+                    <div class="gap-indicator" id="gap-indicator"></div>
                 </div>
                 <div class="graph-labels">
-                    <span>Your Performance</span>
-                    <span>Topper's Performance</span>
+                    <span id="user-label">Your Performance</span>
+                    <span id="topper-label">Topper's Performance</span>
+                    <span id="gap-label">Gap: <span id="gap-value">0</span> marks</span>
                 </div>
                 
                 <div class="analysis-container">
@@ -467,12 +564,11 @@
                         <h3>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
-                                <path d="M12 6C9.79 6 8 7.79 8 10H10C10 8.9 10.9 8 12 8C13.1 8 14 8.9 14 10C14 12 11 11.75 11 15H13C13 12.75 16 12.5 16 10C16 7.79 14.21 6 12 6Z" fill="currentColor"/>
-                                <path d="M13 17H11V19H13V17Z" fill="currentColor"/>
+                                <path d="M13 7H11V13H17V11H13V7Z" fill="currentColor"/>
                             </svg>
-                            Your Current Position
+                            Performance Analysis
                         </h3>
-                        <p id="current-position">Based on your scores, you're currently in the <strong>50-60%</strong> range compared to all NEET aspirants.</p>
+                        <p id="performance-analysis">Based on your scores, we're analyzing your performance...</p>
                     </div>
                     
                     <div class="analysis-card">
@@ -481,15 +577,22 @@
                                 <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
                                 <path d="M13 7H11V13H17V11H13V7Z" fill="currentColor"/>
                             </svg>
-                            Study Plan Recommendation
+                            Study Plan
                         </h3>
-                        <p id="study-plan">You need to study <strong>4-5 hours daily</strong> with <strong>weekly mock tests</strong> to reach your target score.</p>
+                        <p id="study-plan">We'll suggest a personalized study plan based on your results...</p>
                     </div>
+                </div>
+                
+                <div class="motivational-card">
+                    <div class="quote" id="quote">"Success is no accident. It is hard work, perseverance, learning, studying, sacrifice."</div>
+                    <div class="author" id="author">- Pele</div>
+                    <button class="new-quote-btn" id="new-quote-btn">New Motivation</button>
                 </div>
             </div>
         </div>
         
         <div class="ad-container">
+            <div class="ad-label">Advertisement</div>
             <script type="text/javascript">
                 atOptions = {
                     'key' : '43e2bb13f24806c283fb098cfdb2d204',
@@ -504,57 +607,77 @@
     </div>
 
     <script>
-        // Perfect Typing Animation
-        async function typeWelcomeMessage(name) {
-            const element = document.getElementById('welcome-message');
-            const messages = [
-                `Hi ${name}! 👋 Analyzing your NEET preparation...`,
-                `Calculating your potential score...`,
-                `Comparing with toppers...`,
-                `Preparing your personalized report...`,
-                `Here's your detailed analysis!`
-            ];
-            
-            // Clear previous content
-            element.innerHTML = '';
-            
-            for (const message of messages) {
-                // Create a span for this message
-                const messageSpan = document.createElement('span');
-                messageSpan.className = 'typing-text';
-                element.appendChild(messageSpan);
-                
-                // Type out the message
-                await typeText(messageSpan, message);
-                
-                // Wait a bit before next message
-                await new Promise(resolve => setTimeout(resolve, 800));
-                
-                // Clear for next message (except last one)
-                if (message !== messages[messages.length-1]) {
-                    element.innerHTML = '';
-                    await new Promise(resolve => setTimeout(resolve, 300));
-                }
+        // Motivational Quotes
+        const quotes = [
+            {
+                text: "The secret of getting ahead is getting started.",
+                author: "Mark Twain"
+            },
+            {
+                text: "Don't watch the clock; do what it does. Keep going.",
+                author: "Sam Levenson"
+            },
+            {
+                text: "The expert in anything was once a beginner.",
+                author: "Helen Hayes"
+            },
+            {
+                text: "You don't have to be great to start, but you have to start to be great.",
+                author: "Zig Ziglar"
+            },
+            {
+                text: "Believe you can and you're halfway there.",
+                author: "Theodore Roosevelt"
+            },
+            {
+                text: "Success is the sum of small efforts, repeated day in and day out.",
+                author: "Robert Collier"
             }
+        ];
+        
+        // Update Motivational Quote
+        function updateQuote() {
+            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+            document.getElementById('quote').textContent = `"${randomQuote.text}"`;
+            document.getElementById('author').textContent = `- ${randomQuote.author}`;
         }
         
-        function typeText(element, text) {
-            return new Promise(resolve => {
-                let i = 0;
-                const typingInterval = setInterval(() => {
-                    if (i < text.length) {
-                        element.textContent = text.substring(0, i+1);
-                        i++;
-                    } else {
-                        clearInterval(typingInterval);
-                        resolve();
-                    }
-                }, 30);
-            });
+        // Perfect Typing Animation - RESTORED TO ORIGINAL VERSION
+        function typeWelcomeMessage(name, score) {
+            const element = document.getElementById('welcome-message');
+            element.innerHTML = '';
+            
+            const container = document.createElement('div');
+            container.className = 'typing-container';
+            element.appendChild(container);
+            
+            let message = `Here's your detailed analysis, ${name}!`;
+            
+            // Type out the message
+            let i = 0;
+            const typingInterval = setInterval(() => {
+                if (i < message.length) {
+                    container.textContent = message.substring(0, i+1);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                    // Add permanent cursor at end
+                    const cursor = document.createElement('span');
+                    cursor.className = 'typing-cursor';
+                    container.appendChild(cursor);
+                }
+            }, 50);
         }
         
         // Main Analysis Function
         async function analyzePerformance() {
+            const analyzeBtn = document.getElementById('analyze-btn');
+            
+            // Add loading effects
+            analyzeBtn.classList.add('btn-loading');
+            analyzeBtn.classList.add('btn-disabled');
+            analyzeBtn.textContent = 'Analyzing...';
+            
             // Get inputs
             const name = document.getElementById('name').value || "Student";
             const physics = parseInt(document.getElementById('physics').value) || 0;
@@ -566,11 +689,16 @@
             // Validate
             if (physics > 180 || chemistry > 180 || biology > 360) {
                 alert("Please enter valid scores (Physics/Chemistry ≤ 180, Biology ≤ 360)");
+                
+                // Remove loading effects
+                analyzeBtn.classList.remove('btn-loading');
+                analyzeBtn.classList.remove('btn-disabled');
+                analyzeBtn.textContent = 'Analyze My Performance';
                 return;
             }
             
-            // Start typing animation
-            await typeWelcomeMessage(name);
+            // Add slight delay to show loading effect
+            await new Promise(resolve => setTimeout(resolve, 800));
             
             // Difficulty factor
             let difficultyFactor = 1.0;
@@ -592,12 +720,42 @@
             predictedScore = Math.min(predictedScore, 720);
             predictedScore = Math.round(predictedScore);
             
-            // Calculate performance percentage
-            const performancePercent = Math.round((predictedScore / 720) * 100);
+            // Start typing animation with original message
+            typeWelcomeMessage(name, predictedScore);
             
-            // Update UI
-            document.getElementById('predicted-score').textContent = predictedScore;
-            document.getElementById('score-progress').style.width = `${performancePercent}%`;
+            // Update score display
+            const scoreElement = document.getElementById('predicted-score');
+            scoreElement.textContent = predictedScore;
+            
+            // Set color based on score
+            if (predictedScore >= 650) {
+                scoreElement.style.color = 'var(--success)';
+            } 
+            else if (predictedScore < 360) {
+                scoreElement.style.color = 'var(--danger)';
+            } 
+            else {
+                scoreElement.style.color = 'var(--primary)';
+            }
+            
+            // Update progress bar
+            const progressPercent = (predictedScore / 720) * 100;
+            const progressFill = document.getElementById('score-progress');
+            progressFill.style.width = `${progressPercent}%`;
+            
+            // Set progress bar color
+            if (predictedScore >= 650) {
+                progressFill.style.background = 'var(--success)';
+            } 
+            else if (predictedScore < 360) {
+                progressFill.style.background = 'var(--danger)';
+            } 
+            else {
+                progressFill.style.background = 'var(--primary)';
+            }
+            
+            // Update graph
+            updateGraph(predictedScore);
             
             // Update analysis
             updateAnalysis(predictedScore, physics, chemistry, biology, attempt);
@@ -607,48 +765,130 @@
             
             // Smooth scroll to results
             document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            
+            // Remove loading effects
+            analyzeBtn.classList.remove('btn-loading');
+            analyzeBtn.classList.remove('btn-disabled');
+            analyzeBtn.textContent = 'Analyze My Performance';
+        }
+        
+        function updateGraph(userScore) {
+            const topperScore = 700; // Assuming topper scores ~700
+            
+            // Calculate percentages
+            const userPercent = (userScore / 720) * 100;
+            const topperPercent = (topperScore / 720) * 100;
+            const gap = topperScore - userScore;
+            
+            // Update lines
+            document.getElementById('user-line').style.bottom = `${userPercent}%`;
+            document.getElementById('topper-line').style.bottom = `${topperPercent}%`;
+            document.getElementById('gap-indicator').style.bottom = `${userPercent}%`;
+            document.getElementById('gap-indicator').style.height = `${topperPercent - userPercent}%`;
+            
+            // Set line colors
+            const userLine = document.getElementById('user-line');
+            if (userScore >= 650) {
+                userLine.style.background = 'var(--success)';
+            } 
+            else if (userScore < 360) {
+                userLine.style.background = 'var(--danger)';
+            } 
+            else {
+                userLine.style.background = 'var(--primary)';
+            }
+            
+            // Update gap label
+            document.getElementById('gap-value').textContent = gap;
+            
+            // Set gap label color
+            const gapLabel = document.getElementById('gap-label');
+            if (gap < 100) {
+                gapLabel.style.color = 'var(--success)';
+            } 
+            else if (gap > 300) {
+                gapLabel.style.color = 'var(--danger)';
+            } 
+            else {
+                gapLabel.style.color = 'var(--warning)';
+            }
         }
         
         function updateAnalysis(score, physics, chemistry, biology, attempt) {
-            // Performance level
-            let performanceLevel;
-            if (score < 360) performanceLevel = "30-40%";
-            else if (score < 450) performanceLevel = "40-50%";
-            else if (score < 540) performanceLevel = "50-60%";
-            else if (score < 630) performanceLevel = "60-70%";
-            else performanceLevel = "top 30%";
-            
-            document.getElementById('current-position').innerHTML = 
-                `Based on your scores, you're currently in the <strong>${performanceLevel}</strong> range compared to all NEET aspirants.`;
-            
-            // Study plan
-            let studyHours;
-            let focusArea = "";
-            
-            if (score < 360) {
-                studyHours = "6-8 hours";
-                focusArea = "Focus on NCERT concepts and basic problem solving";
-            } else if (score < 450) {
-                studyHours = "5-6 hours";
-                focusArea = "Focus on weak areas and regular practice";
-            } else if (score < 540) {
-                studyHours = "4-5 hours";
-                focusArea = "Focus on speed and accuracy";
-            } else {
-                studyHours = "3-4 hours";
-                focusArea = "Focus on mock tests and revision";
+            // Performance analysis
+            let performanceText = "";
+            if (score >= 650) {
+                performanceText = `Excellent! Your score of ${score} puts you in the <strong>top 10%</strong> of NEET aspirants.`;
+            } 
+            else if (score >= 540) {
+                performanceText = `Good! Your score of ${score} puts you in the <strong>top 30%</strong>. With some improvement, you can reach top ranks.`;
+            } 
+            else if (score >= 360) {
+                performanceText = `Your score of ${score} is <strong>average</strong>. Focused preparation can help you get into good colleges.`;
+            } 
+            else {
+                performanceText = `Your current score of ${score} needs improvement. Don't worry - with proper planning you can significantly increase your score.`;
             }
             
-            if (physics < 100) focusArea += ", especially Physics";
-            if (chemistry < 100) focusArea += ", Chemistry";
-            if (biology < 200) focusArea += ", Biology";
+            // Weak subjects
+            let weakSubjects = [];
+            if (physics < 90) weakSubjects.push("Physics");
+            if (chemistry < 90) weakSubjects.push("Chemistry");
+            if (biology < 180) weakSubjects.push("Biology");
             
-            document.getElementById('study-plan').innerHTML = 
-                `You need to study <strong>${studyHours} daily</strong> with <strong>weekly mock tests</strong>. ${focusArea}.`;
+            if (weakSubjects.length > 0) {
+                performanceText += `<br><br>Focus more on: <strong>${weakSubjects.join(", ")}</strong>`;
+            }
+            
+            document.getElementById('performance-analysis').innerHTML = performanceText;
+            
+            // Study plan
+            let studyPlan = "";
+            if (score >= 650) {
+                studyPlan = `You're close to perfection! Maintain your routine with:<br>
+                            - <strong>2-3 hours</strong> daily revision<br>
+                            - <strong>2 full mocks</strong> per week<br>
+                            - Focus on <strong>speed and accuracy</strong>`;
+            } 
+            else if (score >= 540) {
+                studyPlan = `You're doing well! Recommended plan:<br>
+                            - <strong>3-4 hours</strong> daily study<br>
+                            - <strong>1 mock test</strong> every weekend<br>
+                            - Focus on <strong>weak areas</strong> and NCERT`;
+            } 
+            else if (score >= 360) {
+                studyPlan = `You need to step up! Suggested plan:<br>
+                            - <strong>4-5 hours</strong> daily study<br>
+                            - <strong>2 mock tests</strong> per week<br>
+                            - Complete <strong>NCERT thoroughly</strong> first`;
+            } 
+            else {
+                studyPlan = `You need intensive preparation:<br>
+                            - <strong>6-8 hours</strong> daily study<br>
+                            - <strong>3 mock tests</strong> per week<br>
+                            - Focus on <strong>high-weightage topics</strong> first`;
+            }
+            
+            // Attempt specific advice
+            if (attempt === 1) {
+                studyPlan += "<br>- Since it's your first attempt, build strong fundamentals";
+            } 
+            else if (attempt === 2) {
+                studyPlan += "<br>- Analyze your previous attempt's mistakes carefully";
+            } 
+            else {
+                studyPlan += "<br>- As a repeater, focus on test-taking strategy and time management";
+            }
+            
+            document.getElementById('study-plan').innerHTML = studyPlan;
         }
         
-        // Event listener
+        // Event listeners
         document.getElementById('analyze-btn').addEventListener('click', analyzePerformance);
+        document.getElementById('new-quote-btn').addEventListener('click', updateQuote);
+        
+        // Initialize
+        updateQuote();
     </script>
 </body>
 </html>
