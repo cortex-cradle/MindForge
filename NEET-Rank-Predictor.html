@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEET Prep Analyzer | AI-Powered Analysis</title>
+    <title>NEET Prep Analyzer | AI Analysis</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <style>
         :root {
@@ -69,12 +69,6 @@
             padding: 40px;
             box-shadow: var(--card-shadow);
             margin-bottom: 30px;
-            transition: all 0.3s;
-        }
-        
-        .main-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 30px rgba(33, 150, 243, 0.15);
         }
         
         h1 {
@@ -109,13 +103,6 @@
             border-radius: 10px;
             font-size: 1rem;
             background: var(--white);
-            transition: all 0.3s;
-        }
-        
-        input:focus, select:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(33, 150, 243, 0.2);
         }
         
         .btn-container {
@@ -132,36 +119,13 @@
             font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s;
-            display: inline-block;
             box-shadow: 0 4px 15px rgba(33, 150, 243, 0.3);
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s;
         }
         
         .btn:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(33, 150, 243, 0.4);
-        }
-        
-        .btn:active {
-            transform: translateY(1px);
-        }
-        
-        .btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -60%;
-            width: 200%;
-            height: 200%;
-            background: rgba(255, 255, 255, 0.2);
-            transform: rotate(30deg);
-            transition: all 0.3s;
-        }
-        
-        .btn:hover::after {
-            left: 100%;
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.4);
         }
         
         .result-container {
@@ -174,34 +138,48 @@
             to { opacity: 1; transform: translateY(0); }
         }
         
+        /* Perfect Typing Animation */
         .welcome-message {
-            font-size: 1.5rem;
-            margin-bottom: 30px;
-            color: var(--text);
-            min-height: 60px;
+            font-size: 1.8rem;
+            margin-bottom: 40px;
+            min-height: 100px;
+            text-align: center;
+            color: var(--primary-dark);
+            font-weight: 500;
         }
         
         .typing-text {
-            border-right: 2px solid var(--primary);
+            display: inline-block;
+            position: relative;
+        }
+        
+        .typing-text::after {
+            content: '|';
+            position: absolute;
+            right: -8px;
             animation: blink 0.7s infinite;
+            color: var(--primary);
         }
         
         @keyframes blink {
-            0%, 100% { border-color: transparent; }
-            50% { border-color: var(--primary); }
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
         
+        /* Score Display */
         .score-card {
-            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(0, 188, 212, 0.1) 100%);
-            border-radius: 15px;
-            padding: 30px;
             text-align: center;
-            margin-bottom: 30px;
-            border: 1px solid rgba(33, 150, 243, 0.2);
+            margin-bottom: 40px;
+        }
+        
+        .score-title {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            margin-bottom: 10px;
         }
         
         .score-display {
-            font-size: 4rem;
+            font-size: 4.5rem;
             font-weight: 700;
             background: linear-gradient(45deg, var(--primary), var(--accent));
             -webkit-background-clip: text;
@@ -211,16 +189,14 @@
             line-height: 1;
         }
         
-        .rank-display {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--primary-dark);
-            margin: 10px 0;
-            line-height: 1;
+        .score-outof {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
         }
         
+        /* Progress Bar */
         .progress-container {
-            margin: 40px 0;
+            margin: 50px 0;
         }
         
         .progress-bar {
@@ -236,9 +212,8 @@
             background: linear-gradient(90deg, var(--primary), var(--accent));
             width: 0;
             border-radius: 15px;
-            transition: width 1.5s cubic-bezier(0.65, 0, 0.35, 1);
+            transition: width 1.5s cubic-bezier(0.68, -0.55, 0.27, 1.55);
             position: relative;
-            overflow: hidden;
         }
         
         .progress-fill::after {
@@ -249,13 +224,13 @@
             right: 0;
             bottom: 0;
             background: linear-gradient(90deg, 
-                          rgba(255,255,255,0.1) 0%, 
-                          rgba(255,255,255,0.3) 50%, 
-                          rgba(255,255,255,0.1) 100%);
-            animation: progressShine 2s infinite;
+                      rgba(255,255,255,0) 0%, 
+                      rgba(255,255,255,0.4) 50%, 
+                      rgba(255,255,255,0) 100%);
+            animation: shine 2s infinite;
         }
         
-        @keyframes progressShine {
+        @keyframes shine {
             0% { transform: translateX(-100%); }
             100% { transform: translateX(100%); }
         }
@@ -263,42 +238,33 @@
         .progress-labels {
             display: flex;
             justify-content: space-between;
-            margin-top: 10px;
+            margin-top: 15px;
+        }
+        
+        .progress-label {
+            font-size: 1rem;
             color: var(--text-secondary);
-            font-size: 0.9rem;
+            position: relative;
+            flex: 1;
+            text-align: center;
         }
         
-        .comparison-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 30px;
-            margin: 40px 0;
+        .progress-label:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            width: 1px;
+            height: 10px;
+            background: var(--text-secondary);
+            opacity: 0.3;
         }
         
-        .comparison-card {
-            background: var(--white);
-            border-radius: 15px;
-            padding: 25px;
-            box-shadow: var(--card-shadow);
-        }
-        
-        .comparison-card h3 {
-            color: var(--primary-dark);
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .comparison-card h3 svg {
-            margin-right: 10px;
-            color: var(--accent);
-        }
-        
+        /* Graph */
         .graph-container {
             height: 250px;
+            margin: 50px 0;
             position: relative;
-            margin: 20px 0;
         }
         
         .graph-line {
@@ -308,84 +274,51 @@
             background: rgba(33, 150, 243, 0.1);
         }
         
-        .graph-line:nth-child(1) { bottom: 20%; }
-        .graph-line:nth-child(2) { bottom: 40%; }
-        .graph-line:nth-child(3) { bottom: 60%; }
-        .graph-line:nth-child(4) { bottom: 80%; }
+        .graph-line:nth-child(1) { bottom: 0%; }
+        .graph-line:nth-child(2) { bottom: 25%; }
+        .graph-line:nth-child(3) { bottom: 50%; }
+        .graph-line:nth-child(4) { bottom: 75%; }
+        .graph-line:nth-child(5) { bottom: 100%; }
         
-        .user-graph {
+        .user-line {
             position: absolute;
             bottom: 30%;
             left: 0;
-            width: 0;
-            height: 6px;
+            width: 100%;
+            height: 4px;
             background: linear-gradient(90deg, var(--primary), var(--accent));
-            border-radius: 3px;
-            animation: expand 1.5s forwards 0.3s;
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: expand 1.5s forwards 0.3s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
         
-        .topper-graph {
+        .topper-line {
             position: absolute;
-            bottom: 70%;
+            bottom: 80%;
             left: 0;
-            width: 0;
-            height: 6px;
-            background: linear-gradient(90deg, #FF4081, #FF6E40);
-            border-radius: 3px;
-            animation: expand 1.5s forwards 0.6s;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--danger), #FF8A65);
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: expand 1.5s forwards 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55);
         }
         
         @keyframes expand {
-            from { width: 0; }
-            to { width: 100%; }
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
         }
         
         .graph-labels {
             display: flex;
             justify-content: space-between;
             margin-top: 10px;
-            font-size: 0.9rem;
             color: var(--text-secondary);
         }
         
-        .heatmap-container {
-            margin: 40px 0;
-        }
-        
-        .heatmap-title {
-            text-align: center;
-            margin-bottom: 20px;
-            color: var(--primary-dark);
-            font-weight: 600;
-        }
-        
-        .heatmap {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
-            gap: 10px;
-        }
-        
-        .heatmap-item {
-            padding: 12px;
-            text-align: center;
-            border-radius: 8px;
-            font-size: 0.9rem;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .heatmap-item:hover {
-            transform: scale(1.05);
-        }
-        
-        .level-1 { background-color: #FFCDD2; color: #D32F2F; }
-        .level-2 { background-color: #FFE0B2; color: #F57C00; }
-        .level-3 { background-color: #FFF9C4; color: #FFA000; }
-        .level-4 { background-color: #C8E6C9; color: #388E3C; }
-        .level-5 { background-color: #B3E5FC; color: #0288D1; }
-        
+        /* Analysis Cards */
         .analysis-container {
-            margin: 40px 0;
+            margin: 50px 0;
         }
         
         .analysis-card {
@@ -399,6 +332,7 @@
         .analysis-card h3 {
             color: var(--primary-dark);
             margin-bottom: 15px;
+            font-size: 1.3rem;
             display: flex;
             align-items: center;
         }
@@ -408,66 +342,15 @@
             color: var(--accent);
         }
         
-        .motivational-card {
-            background: linear-gradient(135deg, rgba(33, 150, 243, 0.1) 0%, rgba(0, 188, 212, 0.1) 100%);
-            border-radius: 15px;
-            padding: 30px;
-            text-align: center;
-            margin-top: 40px;
-            border: 1px solid rgba(33, 150, 243, 0.2);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .motivational-card::before {
-            content: '"';
-            position: absolute;
-            top: 10px;
-            left: 20px;
-            font-size: 8rem;
-            color: rgba(33, 150, 243, 0.05);
-            font-family: serif;
-            line-height: 1;
-        }
-        
-        .quote {
-            font-size: 1.3rem;
-            font-style: italic;
-            color: var(--text);
-            margin-bottom: 20px;
-            position: relative;
-            z-index: 1;
-        }
-        
-        .new-quote-btn {
-            background: rgba(33, 150, 243, 0.1);
-            color: var(--primary-dark);
-            border: none;
-            padding: 10px 20px;
-            border-radius: 50px;
-            cursor: pointer;
-            font-weight: 500;
-            margin-top: 15px;
-            transition: all 0.3s;
-        }
-        
-        .new-quote-btn:hover {
-            background: rgba(33, 150, 243, 0.2);
-        }
-        
+        /* Ad Container */
         .ad-container {
             background: var(--white);
-            border-radius: 15px;
+            border-radius: 10px;
             padding: 20px;
-            margin: 40px 0;
+            margin: 40px auto;
+            max-width: 728px;
             text-align: center;
             box-shadow: var(--card-shadow);
-        }
-        
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            color: var(--text-secondary);
         }
         
         @media (max-width: 768px) {
@@ -475,32 +358,24 @@
                 grid-template-columns: 1fr;
             }
             
-            .comparison-container {
-                grid-template-columns: 1fr;
-            }
-            
-            .heatmap {
-                grid-template-columns: repeat(3, 1fr);
-            }
-            
             .score-display {
-                font-size: 3rem;
+                font-size: 3.5rem;
             }
             
-            .rank-display {
-                font-size: 2rem;
+            .welcome-message {
+                font-size: 1.4rem;
             }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <header class="animate__animated animate__fadeInDown">
+        <header>
             <div class="logo">NEET Prep Analyzer</div>
-            <div class="tagline">AI-Powered Performance Analysis & Prediction</div>
+            <div class="tagline">AI-Powered Performance Analysis</div>
         </header>
         
-        <div class="main-card animate__animated animate__fadeIn">
+        <div class="main-card">
             <h1>Enter Your Details</h1>
             
             <div class="input-section">
@@ -508,11 +383,6 @@
                     <div class="input-group">
                         <label for="name">Your Name</label>
                         <input type="text" id="name" placeholder="Enter your name">
-                    </div>
-                    
-                    <div class="input-group">
-                        <label for="age">Your Age</label>
-                        <input type="number" id="age" placeholder="Age" min="16" max="25">
                     </div>
                     
                     <div class="input-group">
@@ -553,136 +423,73 @@
             </div>
             
             <div class="btn-container">
-                <button class="btn animate__animated animate__pulse animate__infinite" id="analyze-btn">Analyze My Performance</button>
+                <button class="btn" id="analyze-btn">Analyze My Performance</button>
             </div>
             
             <div class="result-container" id="result">
                 <div class="welcome-message" id="welcome-message"></div>
                 
-                <div class="score-card animate__animated animate__fadeIn">
-                    <div>Your Predicted NEET Score</div>
+                <div class="score-card">
+                    <div class="score-title">Your Predicted NEET Score</div>
                     <div class="score-display" id="predicted-score">0</div>
-                    <div>out of 720</div>
+                    <div class="score-outof">out of 720</div>
                 </div>
                 
-                <div class="score-card animate__animated animate__fadeIn" style="animation-delay: 0.2s;">
-                    <div>Expected All India Rank</div>
-                    <div class="rank-display" id="predicted-rank">AIR 0</div>
-                    <div>Based on previous year trends</div>
-                </div>
-                
-                <div class="progress-container animate__animated animate__fadeIn" style="animation-delay: 0.4s;">
+                <div class="progress-container">
                     <div class="progress-bar">
                         <div class="progress-fill" id="score-progress"></div>
                     </div>
                     <div class="progress-labels">
-                        <span>0</span>
-                        <span>180 (Passing)</span>
-                        <span>360 (Average)</span>
-                        <span>540 (Good)</span>
-                        <span>720 (Perfect)</span>
+                        <div class="progress-label">0</div>
+                        <div class="progress-label">180</div>
+                        <div class="progress-label">360</div>
+                        <div class="progress-label">540</div>
+                        <div class="progress-label">720</div>
                     </div>
                 </div>
                 
-                <div class="comparison-container">
-                    <div class="comparison-card animate__animated animate__fadeInLeft" style="animation-delay: 0.6s;">
-                        <h3>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16 11C17.66 11 18.99 9.66 18.99 8C18.99 6.34 17.66 5 16 5C14.34 5 13 6.34 13 8C13 9.66 14.34 11 16 11ZM8 11C9.66 11 10.99 9.66 10.99 8C10.99 6.34 9.66 5 8 5C6.34 5 5 6.34 5 8C5 9.66 6.34 11 8 11ZM8 13C5.67 13 1 14.17 1 16.5V19H15V16.5C15 14.17 10.33 13 8 13ZM16 13C15.71 13 15.38 13.02 15.03 13.05C16.19 13.89 17 15.02 17 16.5V19H23V16.5C23 14.17 18.33 13 16 13Z" fill="currentColor"/>
-                            </svg>
-                            Your Performance Trend
-                        </h3>
-                        <div class="graph-container">
-                            <div class="graph-line"></div>
-                            <div class="graph-line"></div>
-                            <div class="graph-line"></div>
-                            <div class="graph-line"></div>
-                            <div class="user-graph"></div>
-                        </div>
-                        <div class="graph-labels">
-                            <span>Start</span>
-                            <span>Current</span>
-                            <span>Goal</span>
-                        </div>
-                    </div>
-                    
-                    <div class="comparison-card animate__animated animate__fadeInRight" style="animation-delay: 0.8s;">
-                        <h3>
-                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M19 5H17V3H7V5H5C3.9 5 3 5.9 3 7V8C3 10.55 4.92 12.63 7.39 12.94C8.02 14.44 9.37 15.57 11 15.9V19H7V21H17V19H13V15.9C14.63 15.57 15.98 14.44 16.61 12.94C19.08 12.63 21 10.55 21 8V7C21 5.9 20.1 5 19 5ZM5 8V7H7V10.82C5.84 10.4 5 9.3 5 8ZM19 8C19 9.3 18.16 10.4 17 10.82V7H19V8Z" fill="currentColor"/>
-                            </svg>
-                            You vs Toppers
-                        </h3>
-                        <div class="graph-container">
-                            <div class="graph-line"></div>
-                            <div class="graph-line"></div>
-                            <div class="graph-line"></div>
-                            <div class="graph-line"></div>
-                            <div class="user-graph"></div>
-                            <div class="topper-graph"></div>
-                        </div>
-                        <div class="graph-labels">
-                            <span>You</span>
-                            <span>Topper</span>
-                            <span>Gap: <span id="gap-score">0</span> marks</span>
-                        </div>
-                    </div>
+                <div class="graph-container">
+                    <div class="graph-line"></div>
+                    <div class="graph-line"></div>
+                    <div class="graph-line"></div>
+                    <div class="graph-line"></div>
+                    <div class="graph-line"></div>
+                    <div class="user-line"></div>
+                    <div class="topper-line"></div>
                 </div>
-                
-                <div class="heatmap-container animate__animated animate__fadeIn" style="animation-delay: 1s;">
-                    <div class="heatmap-title">Your Weak Areas Heatmap</div>
-                    <div class="heatmap" id="heatmap">
-                        <div class="heatmap-item level-1">Optics</div>
-                        <div class="heatmap-item level-4">Electrostatics</div>
-                        <div class="heatmap-item level-2">Genetics</div>
-                        <div class="heatmap-item level-3">Thermodynamics</div>
-                        <div class="heatmap-item level-5">Periodic Table</div>
-                        <div class="heatmap-item level-1">Plant Physio</div>
-                        <div class="heatmap-item level-4">Coordination</div>
-                        <div class="heatmap-item level-2">Biomolecules</div>
-                        <div class="heatmap-item level-3">Organic Chem</div>
-                        <div class="heatmap-item level-5">Human Health</div>
-                    </div>
-                    <div style="text-align: center; margin-top: 15px; color: var(--text-secondary);">
-                        <span style="background: #FFCDD2; padding: 2px 8px; border-radius: 4px; margin-right: 5px;">Weak</span>
-                        <span style="background: #FFF9C4; padding: 2px 8px; border-radius: 4px; margin-right: 5px;">Average</span>
-                        <span style="background: #B3E5FC; padding: 2px 8px; border-radius: 4px;">Strong</span>
-                    </div>
+                <div class="graph-labels">
+                    <span>Your Performance</span>
+                    <span>Topper's Performance</span>
                 </div>
                 
                 <div class="analysis-container">
-                    <div class="analysis-card animate__animated animate__fadeIn" style="animation-delay: 1.2s;">
+                    <div class="analysis-card">
                         <h3>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
                                 <path d="M12 6C9.79 6 8 7.79 8 10H10C10 8.9 10.9 8 12 8C13.1 8 14 8.9 14 10C14 12 11 11.75 11 15H13C13 12.75 16 12.5 16 10C16 7.79 14.21 6 12 6Z" fill="currentColor"/>
                                 <path d="M13 17H11V19H13V17Z" fill="currentColor"/>
                             </svg>
-                            College Prediction
+                            Your Current Position
                         </h3>
-                        <p id="college-prediction">Based on your current performance</p>
+                        <p id="current-position">Based on your scores, you're currently in the <strong>50-60%</strong> range compared to all NEET aspirants.</p>
                     </div>
                     
-                    <div class="analysis-card animate__animated animate__fadeIn" style="animation-delay: 1.4s;">
+                    <div class="analysis-card">
                         <h3>
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20Z" fill="currentColor"/>
                                 <path d="M13 7H11V13H17V11H13V7Z" fill="currentColor"/>
                             </svg>
-                            Improvement Plan
+                            Study Plan Recommendation
                         </h3>
-                        <p id="improvement-plan">Your personalized study strategy will appear here</p>
+                        <p id="study-plan">You need to study <strong>4-5 hours daily</strong> with <strong>weekly mock tests</strong> to reach your target score.</p>
                     </div>
-                </div>
-                
-                <div class="motivational-card animate__animated animate__fadeIn" style="animation-delay: 1.6s;">
-                    <div class="quote" id="quote">"Success is no accident. It is hard work, perseverance, learning, studying, sacrifice."</div>
-                    <button class="new-quote-btn" id="new-quote-btn">New Motivation</button>
                 </div>
             </div>
         </div>
         
-        <div class="ad-container animate__animated animate__fadeIn">
+        <div class="ad-container">
             <script type="text/javascript">
                 atOptions = {
                     'key' : '43e2bb13f24806c283fb098cfdb2d204',
@@ -694,72 +501,66 @@
             </script>
             <script type="text/javascript" src="//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.js"></script>
         </div>
-        
-        <footer class="animate__animated animate__fadeIn">
-            <p>NEET Prep Analyzer &copy; 2023 | AI-Powered Performance Analysis</p>
-        </footer>
     </div>
 
     <script>
-        // Typing animation for welcome message
-        function typeWelcomeMessage(name, callback) {
+        // Perfect Typing Animation
+        async function typeWelcomeMessage(name) {
+            const element = document.getElementById('welcome-message');
             const messages = [
-                `Hi ${name}! 👋`,
-                `Analyzing your NEET preparation...`,
-                `Calculating your potential rank...`,
-                `Identifying weak areas...`,
-                `Ready with your results!`
+                `Hi ${name}! 👋 Analyzing your NEET preparation...`,
+                `Calculating your potential score...`,
+                `Comparing with toppers...`,
+                `Preparing your personalized report...`,
+                `Here's your detailed analysis!`
             ];
             
-            const element = document.getElementById('welcome-message');
-            let messageIndex = 0;
-            let charIndex = 0;
-            let isDeleting = false;
-            let typingSpeed = 100;
+            // Clear previous content
+            element.innerHTML = '';
             
-            function type() {
-                const currentMessage = messages[messageIndex];
+            for (const message of messages) {
+                // Create a span for this message
+                const messageSpan = document.createElement('span');
+                messageSpan.className = 'typing-text';
+                element.appendChild(messageSpan);
                 
-                if (isDeleting) {
-                    element.innerHTML = currentMessage.substring(0, charIndex - 1) + '<span class="typing-text"></span>';
-                    charIndex--;
-                } else {
-                    element.innerHTML = currentMessage.substring(0, charIndex + 1) + '<span class="typing-text"></span>';
-                    charIndex++;
-                }
+                // Type out the message
+                await typeText(messageSpan, message);
                 
-                if (!isDeleting && charIndex === currentMessage.length) {
-                    isDeleting = true;
-                    typingSpeed = 50;
-                    setTimeout(type, 1500);
-                } else if (isDeleting && charIndex === 0) {
-                    isDeleting = false;
-                    messageIndex++;
-                    typingSpeed = 100;
-                    
-                    if (messageIndex === messages.length) {
-                        if (callback) callback();
-                        return;
-                    }
-                    
-                    setTimeout(type, 500);
-                } else {
-                    setTimeout(type, typingSpeed);
+                // Wait a bit before next message
+                await new Promise(resolve => setTimeout(resolve, 800));
+                
+                // Clear for next message (except last one)
+                if (message !== messages[messages.length-1]) {
+                    element.innerHTML = '';
+                    await new Promise(resolve => setTimeout(resolve, 300));
                 }
             }
-            
-            type();
         }
         
-        // NEET Prediction Algorithm
-        function analyzePerformance() {
+        function typeText(element, text) {
+            return new Promise(resolve => {
+                let i = 0;
+                const typingInterval = setInterval(() => {
+                    if (i < text.length) {
+                        element.textContent = text.substring(0, i+1);
+                        i++;
+                    } else {
+                        clearInterval(typingInterval);
+                        resolve();
+                    }
+                }, 30);
+            });
+        }
+        
+        // Main Analysis Function
+        async function analyzePerformance() {
             // Get inputs
             const name = document.getElementById('name').value || "Student";
-            const age = parseInt(document.getElementById('age').value) || 18;
-            const attempt = parseInt(document.getElementById('attempt').value);
             const physics = parseInt(document.getElementById('physics').value) || 0;
             const chemistry = parseInt(document.getElementById('chemistry').value) || 0;
             const biology = parseInt(document.getElementById('biology').value) || 0;
+            const attempt = parseInt(document.getElementById('attempt').value);
             const testLevel = document.getElementById('test-level').value;
             
             // Validate
@@ -767,6 +568,9 @@
                 alert("Please enter valid scores (Physics/Chemistry ≤ 180, Biology ≤ 360)");
                 return;
             }
+            
+            // Start typing animation
+            await typeWelcomeMessage(name);
             
             // Difficulty factor
             let difficultyFactor = 1.0;
@@ -788,138 +592,63 @@
             predictedScore = Math.min(predictedScore, 720);
             predictedScore = Math.round(predictedScore);
             
-            // Calculate rank (2023 trends)
-            let predictedRank;
-            if (predictedScore >= 700) predictedRank = "AIR 1-50";
-            else if (predictedScore >= 650) predictedRank = "AIR 50-500";
-            else if (predictedScore >= 600) predictedRank = "AIR 500-5,000";
-            else if (predictedScore >= 550) predictedRank = "AIR 5,000-15,000";
-            else if (predictedScore >= 500) predictedRank = "AIR 15,000-50,000";
-            else if (predictedScore >= 450) predictedRank = "AIR 50,000-1,00,000";
-            else if (predictedScore >= 360) predictedRank = "AIR 1,00,000-2,50,000";
-            else predictedRank = "Above AIR 2,50,000";
+            // Calculate performance percentage
+            const performancePercent = Math.round((predictedScore / 720) * 100);
             
-            // Calculate gap from toppers (assuming topper scores ~680-720)
-            const topperAvg = 700;
-            const gap = topperAvg - predictedScore;
+            // Update UI
+            document.getElementById('predicted-score').textContent = predictedScore;
+            document.getElementById('score-progress').style.width = `${performancePercent}%`;
             
-            // Update heatmap based on scores
-            updateHeatmap(physics, chemistry, biology);
+            // Update analysis
+            updateAnalysis(predictedScore, physics, chemistry, biology, attempt);
             
-            // Show typing animation first
-            typeWelcomeMessage(name, function() {
-                // Then show results
-                document.getElementById('predicted-score').textContent = predictedScore;
-                document.getElementById('predicted-rank').textContent = predictedRank;
-                document.getElementById('score-progress').style.width = (predictedScore / 720 * 100) + '%';
-                document.getElementById('gap-score').textContent = gap;
-                
-                // Update college prediction
-                updateCollegePrediction(predictedScore);
-                
-                // Update improvement plan
-                updateImprovementPlan(predictedScore, physics, chemistry, biology, attempt);
-                
-                // Show results container
-                document.getElementById('result').style.display = 'block';
-                
-                // Smooth scroll to results
-                document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
-            });
+            // Show results
+            document.getElementById('result').style.display = 'block';
+            
+            // Smooth scroll to results
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
         }
         
-        function updateHeatmap(physics, chemistry, biology) {
-            // Simple logic to determine topic levels based on subject scores
-            const physicsLevel = physics < 90 ? 1 : physics < 120 ? 2 : physics < 150 ? 3 : 4;
-            const chemistryLevel = chemistry < 90 ? 1 : chemistry < 120 ? 2 : chemistry < 150 ? 3 : 4;
-            const biologyLevel = biology < 180 ? 1 : biology < 240 ? 2 : biology < 300 ? 3 : 4;
+        function updateAnalysis(score, physics, chemistry, biology, attempt) {
+            // Performance level
+            let performanceLevel;
+            if (score < 360) performanceLevel = "30-40%";
+            else if (score < 450) performanceLevel = "40-50%";
+            else if (score < 540) performanceLevel = "50-60%";
+            else if (score < 630) performanceLevel = "60-70%";
+            else performanceLevel = "top 30%";
             
-            // Update heatmap items with appropriate levels
-            const topics = [
-                { name: "Optics", level: physics < 30 ? 1 : physics < 60 ? 2 : physics < 90 ? 3 : 4 },
-                { name: "Electrostatics", level: physics < 40 ? 1 : physics < 70 ? 2 : physics < 100 ? 3 : 4 },
-                { name: "Genetics", level: biology < 60 ? 1 : biology < 100 ? 2 : biology < 140 ? 3 : 4 },
-                { name: "Thermodynamics", level: physics < 50 ? 1 : physics < 80 ? 2 : physics < 110 ? 3 : 4 },
-                { name: "Periodic Table", level: chemistry < 50 ? 1 : chemistry < 80 ? 2 : chemistry < 110 ? 3 : 4 },
-                { name: "Plant Physio", level: biology < 50 ? 1 : biology < 90 ? 2 : biology < 130 ? 3 : 4 },
-                { name: "Coordination", level: biology < 70 ? 1 : biology < 110 ? 2 : biology < 150 ? 3 : 4 },
-                { name: "Biomolecules", level: biology < 40 ? 1 : biology < 80 ? 2 : biology < 120 ? 3 : 4 },
-                { name: "Organic Chem", level: chemistry < 60 ? 1 : chemistry < 90 ? 2 : chemistry < 120 ? 3 : 4 },
-                { name: "Human Health", level: biology < 80 ? 1 : biology < 120 ? 2 : biology < 160 ? 3 : 4 }
-            ];
+            document.getElementById('current-position').innerHTML = 
+                `Based on your scores, you're currently in the <strong>${performanceLevel}</strong> range compared to all NEET aspirants.`;
             
-            const heatmap = document.getElementById('heatmap');
-            heatmap.innerHTML = '';
+            // Study plan
+            let studyHours;
+            let focusArea = "";
             
-            topics.forEach(topic => {
-                const item = document.createElement('div');
-                item.className = `heatmap-item level-${topic.level}`;
-                item.textContent = topic.name;
-                heatmap.appendChild(item);
-            });
-        }
-        
-        function updateCollegePrediction(score) {
-            let college;
-            if (score >= 680) college = "AIIMS Delhi, Top Central Universities";
-            else if (score >= 630) college = "AIIMS, Top State Medical Colleges";
-            else if (score >= 580) college = "Good Government Medical Colleges";
-            else if (score >= 520) college = "Mid-tier Government Colleges";
-            else if (score >= 450) college = "Private Medical Colleges";
-            else college = "Need significant improvement for government colleges";
-            
-            document.getElementById('college-prediction').textContent = college;
-        }
-        
-        function updateImprovementPlan(score, physics, chemistry, biology, attempt) {
-            let plan = [];
-            
-            // General tips based on score
-            if (score < 450) {
-                plan.push("📚 Complete NCERT thoroughly (3+ readings)");
-                plan.push("🎯 Focus on high-weightage chapters first");
-                plan.push("📝 Solve last 5 years' NEET papers");
-            } else if (score < 550) {
-                plan.push("⏱️ Practice 50+ MCQs daily with timer");
-                plan.push("📖 Analyze mistakes weekly (keep error notebook)");
-                plan.push("📊 Take full-length mocks every weekend");
+            if (score < 360) {
+                studyHours = "6-8 hours";
+                focusArea = "Focus on NCERT concepts and basic problem solving";
+            } else if (score < 450) {
+                studyHours = "5-6 hours";
+                focusArea = "Focus on weak areas and regular practice";
+            } else if (score < 540) {
+                studyHours = "4-5 hours";
+                focusArea = "Focus on speed and accuracy";
             } else {
-                plan.push("🧠 Fine-tune exam strategy (question selection)");
-                plan.push("⚡ Work on speed (45-50 secs per question)");
-                plan.push("🔄 Revise diagrams & formulae weekly");
+                studyHours = "3-4 hours";
+                focusArea = "Focus on mock tests and revision";
             }
             
-            // Subject-specific tips
-            if (physics < 90) plan.push("⚛️ Physics: Focus on Optics & Modern Physics");
-            if (chemistry < 90) plan.push("🧪 Chemistry: Master Organic Reactions");
-            if (biology < 200) plan.push("🧬 Biology: Strengthen Genetics & Plant Physio");
+            if (physics < 100) focusArea += ", especially Physics";
+            if (chemistry < 100) focusArea += ", Chemistry";
+            if (biology < 200) focusArea += ", Biology";
             
-            // Attempt-specific tips
-            if (attempt === 1) plan.push("✨ First attempt? Build strong conceptual foundation");
-            else if (attempt === 2) plan.push("🔍 Second attempt? Focus on weak areas & test-taking");
-            else plan.push("🎖️ Multiple attempts? Maximize accuracy & speed");
-            
-            document.getElementById('improvement-plan').innerHTML = plan.join('<br>');
+            document.getElementById('study-plan').innerHTML = 
+                `You need to study <strong>${studyHours} daily</strong> with <strong>weekly mock tests</strong>. ${focusArea}.`;
         }
         
-        // Motivational quotes
-        const quotes = [
-            { text: "Success is no accident. It is hard work, perseverance, learning, studying, sacrifice.", author: "Pele" },
-            { text: "The secret of getting ahead is getting started.", author: "Mark Twain" },
-            { text: "Don't watch the clock; do what it does. Keep going.", author: "Sam Levenson" },
-            { text: "The expert in anything was once a beginner.", author: "Helen Hayes" },
-            { text: "You don't have to be great to start, but you have to start to be great.", author: "Zig Ziglar" },
-            { text: "Believe you can and you're halfway there.", author: "Theodore Roosevelt" }
-        ];
-        
-        function updateQuote() {
-            const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
-            document.getElementById('quote').textContent = `"${randomQuote.text}"`;
-        }
-        
-        // Event listeners
+        // Event listener
         document.getElementById('analyze-btn').addEventListener('click', analyzePerformance);
-        document.getElementById('new-quote-btn').addEventListener('click', updateQuote);
     </script>
 </body>
 </html>
