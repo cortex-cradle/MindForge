@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Study Master | Smart Scheduling</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        /* ==== Modern Minimalist CSS ==== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        /* ==== Main Layout ==== */
+        .app-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: 1fr 300px;
+            gap: 20px;
+        }
+
+        /* ==== Header ==== */
+        .header {
+            grid-column: 1 / -1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #e0e0e0;
+            margin-bottom: 20px;
+        }
+
+        .header h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2563eb;
+        }
+
+        /* ==== AI Schedule Generator ==== */
+        .ai-scheduler {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .ai-scheduler h2 {
+            margin-bottom: 15px;
+            font-size: 1.3rem;
+            color: #2563eb;
+        }
+
+        .ai-form {
+            display: grid;
+            gap: 15px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .form-group label {
+            font-weight: 500;
+            font-size: 0.9rem;
+        }
+
+        .form-group input, .form-group select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .generate-btn {
+            background: #2563eb;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .generate-btn:hover {
+            background: #1d4ed8;
+        }
+
+        /* ==== Smart Timeline ==== */
+        .timeline-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+
+        .timeline-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .timeline-header h2 {
+            font-size: 1.3rem;
+            color: #2563eb;
+        }
+
+        .timeline {
+            display: grid;
+            grid-template-columns: 80px 1fr;
+            gap: 10px;
+        }
+
+        .time-slots {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .time-slot {
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 10px;
+            color: #666;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .schedule-area {
+            position: relative;
+            min-height: calc(12 * 60px);
+            border-left: 1px solid #eee;
+        }
+
+        .study-block {
+            position: absolute;
+            width: calc(100% - 10px);
+            left: 5px;
+            border-radius: 8px;
+            padding: 10px;
+            background: #eff6ff;
+            border-left: 4px solid #2563eb;
+            cursor: move;
+            transition: all 0.2s;
+        }
+
+        .study-block:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .block-subject {
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .block-topic {
+            font-size: 0.9rem;
+            color: #555;
+        }
+
+        /* ==== Focus Analytics ==== */
+        .analytics-container {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .analytics-header {
+            margin-bottom: 15px;
+        }
+
+        .analytics-header h2 {
+            font-size: 1.3rem;
+            color: #2563eb;
+        }
+
+        .focus-metrics {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .metric-card {
+            background: #f8fafc;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #2563eb;
+            margin-bottom: 5px;
+        }
+
+        .metric-label {
+            font-size: 0.85rem;
+            color: #666;
+        }
+
+        /* ==== Ad Sidebar ==== */
+        .sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .ad-container {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            text-align: center;
+        }
+
+        .ad-container h3 {
+            font-size: 0.9rem;
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        /* ==== Responsive Design ==== */
+        @media (max-width: 768px) {
+            .app-container {
+                grid-template-columns: 1fr;
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="header">
+            <h1>AI Study Master</h1>
+            <button id="focus-btn" class="generate-btn">Start Focus Session</button>
+        </header>
+
+        <!-- Main Content -->
+        <main>
+            <!-- AI Schedule Generator -->
+            <section class="ai-scheduler">
+                <h2>📅 AI-Powered Schedule Generator</h2>
+                <form class="ai-form">
+                    <div class="form-group">
+                        <label for="exam-date">Upcoming Exam Date</label>
+                        <input type="date" id="exam-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="study-hours">Daily Study Hours</label>
+                        <select id="study-hours">
+                            <option value="2">2 hours</option>
+                            <option value="4" selected>4 hours</option>
+                            <option value="6">6 hours</option>
+                            <option value="8">8 hours</option>
+                        </select>
+                    </div>
+                    <button type="button" id="generate-schedule" class="generate-btn">
+                        Generate Smart Schedule
+                    </button>
+                </form>
+            </section>
+
+            <!-- Smart Timeline -->
+            <section class="timeline-container">
+                <div class="timeline-header">
+                    <h2>⏳ Today's Schedule</h2>
+                    <button id="add-task" class="generate-btn" style="padding: 8px 12px; font-size: 0.9rem;">
+                        + Add Task
+                    </button>
+                </div>
+                <div class="timeline">
+                    <div class="time-slots" id="time-slots">
+                        <!-- Time slots will be added here -->
+                    </div>
+                    <div class="schedule-area" id="schedule-area">
+                        <!-- Study blocks will be added here -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Focus Analytics -->
+            <section class="analytics-container">
+                <div class="analytics-header">
+                    <h2>📊 Focus Analytics</h2>
+                </div>
+                <div class="focus-metrics">
+                    <div class="metric-card">
+                        <div class="metric-value" id="focus-score">82%</div>
+                        <div class="metric-label">Focus Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value" id="productive-time">3.2h</div>
+                        <div class="metric-label">Productive Time</div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="ai-feedback">AI Recommendation</label>
+                    <textarea id="ai-feedback" rows="3" readonly style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px;">
+Based on your recent sessions, try studying in 90-minute blocks with 20-minute breaks for better retention.
+                    </textarea>
+                </div>
+            </section>
+        </main>
+
+        <!-- Sidebar with Ads -->
+        <aside class="sidebar">
+            <div class="ad-container">
+                <h3>Advertisement</h3>
+                <div id="ad-banner">
+                    <!-- Ad script will be injected here -->
+                    <script type="text/javascript">
+                        atOptions = {
+                            'key': '43e2bb13f24806c283fb098cfdb2d204',
+                            'format': 'iframe',
+                            'height': 250,
+                            'width': 300,
+                            'params': {}
+                        };
+                    </script>
+                    <script type="text/javascript" src="//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.js"></script>
+                </div>
+            </div>
+
+            <div class="ad-container">
+                <h3>Upcoming Features</h3>
+                <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">
+                    Mobile app with real-time sync coming soon!
+                </p>
+                <button id="notify-me" style="width: 100%; padding: 8px; background: #e0e7ff; color: #2563eb; border: none; border-radius: 5px; cursor: pointer;">
+                    Notify Me
+                </button>
+            </div>
+        </aside>
+    </div>
+
+    <script>
+        // ==== DOM Elements ====
+        const timeSlots = document.getElementById('time-slots');
+        const scheduleArea = document.getElementById('schedule-area');
+        const generateBtn = document.getElementById('generate-schedule');
+        const addTaskBtn = document.getElementById('add-task');
+        const focusBtn = document.getElementById('focus-btn');
+        const notifyBtn = document.getElementById('notify-me');
+
+        // ==== App State ====
+        let studySessions = [];
+        let subjects = [
+            { id: 1, name: "Mathematics", color: "#2563eb" },
+            { id: 2, name: "Physics", color: "#059669" },
+            { id: 3, name: "Chemistry", color: "#d946ef" },
+            { id: 4, name: "Biology", color: "#ea580c" }
+        ];
+
+        // ==== Initialize App ====
+        function initApp() {
+            generateTimeSlots();
+            loadSampleSessions();
+            setupEventListeners();
+        }
+
+        // ==== Generate Time Slots ====
+        function generateTimeSlots() {
+            timeSlots.innerHTML = '';
+            for (let hour = 8; hour <= 20; hour++) {
+                const timeSlot = document.createElement('div');
+                timeSlot.className = 'time-slot';
+                timeSlot.textContent = `${hour}:00`;
+                timeSlots.appendChild(timeSlot);
+            }
+        }
+
+        // ==== Load Sample Sessions ====
+        function loadSampleSessions() {
+            studySessions = [
+                { id: 1, subjectId: 1, startTime: 9, endTime: 10, topic: "Calculus Practice" },
+                { id: 2, subjectId: 2, startTime: 11, endTime: 12, topic: "Quantum Mechanics" },
+                { id: 3, subjectId: 3, startTime: 14, endTime: 15, topic: "Organic Chemistry" }
+            ];
+            renderSessions();
+        }
+
+        // ==== Render Study Sessions ====
+        function renderSessions() {
+            scheduleArea.innerHTML = '';
+            studySessions.forEach(session => {
+                const subject = subjects.find(s => s.id === session.subjectId);
+                if (!subject) return;
+
+                const block = document.createElement('div');
+                block.className = 'study-block';
+                block.dataset.id = session.id;
+                block.style.top = `${(session.startTime - 8) * 60}px`;
+                block.style.height = `${(session.endTime - session.startTime) * 60}px`;
+                block.style.borderLeftColor = subject.color;
+                block.innerHTML = `
+                    <div class="block-subject">${subject.name}</div>
+                    <div class="block-topic">${session.topic}</div>
+                `;
+                scheduleArea.appendChild(block);
+                setupBlockDrag(block);
+            });
+        }
+
+        // ==== Setup Event Listeners ====
+        function setupEventListeners() {
+            // Generate AI Schedule
+            generateBtn.addEventListener('click', () => {
+                const examDate = document.getElementById('exam-date').value;
+                const studyHours = document.getElementById('study-hours').value;
+                
+                if (!examDate) {
+                    alert("Please select an exam date first!");
+                    return;
+                }
+
+                // Simulate AI processing
+                setTimeout(() => {
+                    alert("AI has generated an optimized schedule based on your exam date and available hours!");
+                    // In a real app, this would fetch from an AI API
+                    studySessions = [
+                        { id: 4, subjectId: 1, startTime: 9, endTime: 11, topic: "Advanced Calculus" },
+                        { id: 5, subjectId: 2, startTime: 13, endTime: 14, topic: "Electromagnetism" },
+                        { id: 6, subjectId: 4, startTime: 16, endTime: 17, topic: "Cell Biology" }
+                    ];
+                    renderSessions();
+                }, 1000);
+            });
+
+            // Add New Task
+            addTaskBtn.addEventListener('click', () => {
+                if (subjects.length === 0) {
+                    alert("Please add subjects first!");
+                    return;
+                }
+
+                const newSession = {
+                    id: Date.now(),
+                    subjectId: subjects[0].id,
+                    startTime: 10,
+                    endTime: 11,
+                    topic: "New Study Topic"
+                };
+                studySessions.push(newSession);
+                renderSessions();
+            });
+
+            // Start Focus Session
+            focusBtn.addEventListener('click', () => {
+                alert("Focus session started! AI will monitor your productivity.");
+                // In a real app, this would start a timer and track focus
+                document.getElementById('focus-score').textContent = "85%";
+                document.getElementById('productive-time').textContent = "0.0h";
+            });
+
+            // Notify Button
+            notifyBtn.addEventListener('click', () => {
+                alert("We'll notify you when new features launch!");
+            });
+        }
+
+        // ==== Drag & Drop Setup ====
+        function setupBlockDrag(element) {
+            let pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0;
+            
+            element.onmousedown = dragMouseDown;
+            
+            function dragMouseDown(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                document.onmouseup = closeDragElement;
+                document.onmousemove = elementDrag;
+            }
+            
+            function elementDrag(e) {
+                e = e || window.event;
+                e.preventDefault();
+                pos1 = pos3 - e.clientX;
+                pos2 = pos4 - e.clientY;
+                pos3 = e.clientX;
+                pos4 = e.clientY;
+                
+                element.style.top = (element.offsetTop - pos2) + "px";
+                element.style.left = (element.offsetLeft - pos1) + "px";
+            }
+            
+            function closeDragElement() {
+                document.onmouseup = null;
+                document.onmousemove = null;
+                
+                // Update session time in state
+                const sessionId = parseInt(element.dataset.id);
+                const session = studySessions.find(s => s.id === sessionId);
+                if (session) {
+                    const newStartTime = Math.floor(parseInt(element.style.top) / 60) + 8;
+                    const duration = session.endTime - session.startTime;
+                    session.startTime = newStartTime;
+                    session.endTime = newStartTime + duration;
+                }
+            }
+        }
+
+        // ==== Start the App ====
+        document.addEventListener('DOMContentLoaded', initApp);
+    </script>
+</body>
+</html>
