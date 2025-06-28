@@ -642,88 +642,31 @@
             document.getElementById('author').textContent = `- ${randomQuote.author}`;
         }
         
-        // Perfect Typing Animation
-        async function typeWelcomeMessage(name, score) {
+        // Perfect Typing Animation - RESTORED TO ORIGINAL VERSION
+        function typeWelcomeMessage(name, score) {
             const element = document.getElementById('welcome-message');
             element.innerHTML = '';
             
-            let messages = [];
+            const container = document.createElement('div');
+            container.className = 'typing-container';
+            element.appendChild(container);
             
-            // Different messages based on score range
-            if (score < 360) {
-                messages = [
-                    `Hi ${name}! 👋 Your current score is ${score}`,
-                    `Don't worry! With proper planning...`,
-                    `You can improve significantly...`,
-                    `Let's analyze your weak areas...`,
-                    `Here's your personalized report!`
-                ];
-            } 
-            else if (score < 540) {
-                messages = [
-                    `Hi ${name}! 👋 Your score: ${score}`,
-                    `You're on the right track...`,
-                    `With some focused preparation...`,
-                    `You can reach your dream college...`,
-                    `Here's your detailed analysis!`
-                ];
-            }
-            else {
-                messages = [
-                    `Hi ${name}! 👋 Excellent score: ${score}`,
-                    `You're among the top performers...`,
-                    `With some final polishing...`,
-                    `You can secure a top rank...`,
-                    `Here's how to maximize your potential!`
-                ];
-            }
+            let message = `Here's your detailed analysis, ${name}!`;
             
-            for (const message of messages) {
-                // Create container for this message
-                const container = document.createElement('div');
-                container.className = 'typing-container';
-                element.appendChild(container);
-                
-                // Type out the message
-                await typeText(container, message);
-                
-                // Add cursor
-                const cursor = document.createElement('span');
-                cursor.className = 'typing-cursor';
-                container.appendChild(cursor);
-                
-                // Wait before next message
-                await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                // Remove cursor
-                cursor.remove();
-                
-                // Clear for next message (except last one)
-                if (message !== messages[messages.length-1]) {
-                    element.innerHTML = '';
-                    await new Promise(resolve => setTimeout(resolve, 300));
+            // Type out the message
+            let i = 0;
+            const typingInterval = setInterval(() => {
+                if (i < message.length) {
+                    container.textContent = message.substring(0, i+1);
+                    i++;
+                } else {
+                    clearInterval(typingInterval);
+                    // Add permanent cursor at end
+                    const cursor = document.createElement('span');
+                    cursor.className = 'typing-cursor';
+                    container.appendChild(cursor);
                 }
-            }
-            
-            // Add permanent cursor at end
-            const cursor = document.createElement('span');
-            cursor.className = 'typing-cursor';
-            element.appendChild(cursor);
-        }
-        
-        function typeText(element, text) {
-            return new Promise(resolve => {
-                let i = 0;
-                const typingInterval = setInterval(() => {
-                    if (i < text.length) {
-                        element.textContent = text.substring(0, i+1);
-                        i++;
-                    } else {
-                        clearInterval(typingInterval);
-                        resolve();
-                    }
-                }, 50); // Adjusted typing speed
-            });
+            }, 50);
         }
         
         // Main Analysis Function
@@ -777,8 +720,8 @@
             predictedScore = Math.min(predictedScore, 720);
             predictedScore = Math.round(predictedScore);
             
-            // Start typing animation with score-based messages
-            await typeWelcomeMessage(name, predictedScore);
+            // Start typing animation with original message
+            typeWelcomeMessage(name, predictedScore);
             
             // Update score display
             const scoreElement = document.getElementById('predicted-score');
