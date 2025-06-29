@@ -15,6 +15,41 @@
             --success: #4cc9f0;
             --warning: #f8961e;
             --danger: #f94144;
+            --text-primary: #f8f9fa;
+            --text-secondary: #d1d1d1;
+        }
+
+        /* Night Sky Theme */
+        .night-sky {
+            --bg-primary: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            --bg-secondary: rgba(26, 26, 46, 0.7);
+            --text-primary: #f8f9fa;
+            --text-secondary: #d1d1d1;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --interaction-bg: #e94584;
+        }
+
+        /* Deep Ocean Theme */
+        .deep-ocean {
+            --bg-primary: linear-gradient(135deg, #000428, #004e92, #000428);
+            --bg-secondary: rgba(0, 20, 40, 0.7);
+            --text-primary: #f0f8ff;
+            --text-secondary: #b0e0e6;
+            --card-bg: rgba(0, 80, 120, 0.15);
+            --card-border: rgba(100, 200, 255, 0.2);
+            --interaction-bg: #4cc9f0;
+        }
+
+        /* Black Hole Theme */
+        .black-hole {
+            --bg-primary: radial-gradient(circle at center, #000000, #1a1a2e 70%, #000000);
+            --bg-secondary: rgba(10, 10, 20, 0.9);
+            --text-primary: #e6e6fa;
+            --text-secondary: #9370db;
+            --card-bg: rgba(106, 90, 205, 0.15);
+            --card-border: rgba(106, 90, 205, 0.3);
+            --interaction-bg: #9370db;
         }
 
         * {
@@ -25,24 +60,11 @@
         }
 
         body {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: var(--light);
+            background: var(--bg-primary);
+            color: var(--text-primary);
             min-height: 100vh;
             overflow-x: hidden;
-            transition: background 1s ease;
-        }
-
-        /* Theme Classes */
-        .night-sky {
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-        }
-
-        .deep-ocean {
-            background: linear-gradient(135deg, #000428, #004e92, #000428);
-        }
-
-        .black-hole {
-            background: radial-gradient(circle, #000000, #1a1a2e, #000000);
+            transition: background 1s ease, color 0.5s ease;
         }
 
         /* Header */
@@ -53,6 +75,10 @@
             padding: 1.5rem 2rem;
             position: relative;
             z-index: 10;
+            background: var(--bg-secondary);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            border-bottom: 1px solid var(--card-border);
         }
 
         .logo {
@@ -93,6 +119,7 @@
             transition: all 0.3s ease;
             color: white;
             font-size: 1.2rem;
+            border: 1px solid var(--card-border);
         }
 
         .theme-btn:hover {
@@ -102,6 +129,7 @@
 
         .theme-btn.active {
             box-shadow: 0 0 15px rgba(255, 255, 255, 0.3);
+            background: var(--interaction-bg);
         }
 
         /* Main Container */
@@ -114,46 +142,38 @@
             margin: 0 auto;
         }
 
-        /* Dashboard */
-        .dashboard {
-            background: rgba(255, 255, 255, 0.05);
+        /* Cards */
+        .card {
+            background: var(--card-bg);
             border-radius: 20px;
             padding: 2rem;
             backdrop-filter: blur(10px);
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
             position: relative;
             overflow: hidden;
+            border: 1px solid var(--card-border);
+            transition: all 0.3s ease;
         }
 
-        .dashboard::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(106, 90, 205, 0.1) 0%, transparent 70%);
-            animation: rotate 20s linear infinite;
-            z-index: -1;
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
         }
 
-        @keyframes rotate {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
-        .dashboard-header {
+        .card-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 2rem;
         }
 
-        .dashboard-header h2 {
+        .card-header h2 {
             font-size: 1.5rem;
             font-weight: 500;
+            color: var(--text-primary);
         }
 
+        /* Dashboard */
         .moonstones {
             display: flex;
             align-items: center;
@@ -161,6 +181,7 @@
             background: rgba(255, 255, 255, 0.1);
             padding: 0.5rem 1rem;
             border-radius: 50px;
+            border: 1px solid var(--card-border);
         }
 
         .moonstones i {
@@ -168,7 +189,6 @@
             font-size: 1.2rem;
         }
 
-        /* Sleep Timer */
         .sleep-timer {
             display: flex;
             flex-direction: column;
@@ -196,13 +216,14 @@
             width: 90%;
             height: 90%;
             border-radius: 50%;
-            background: var(--dark);
+            background: var(--bg-secondary);
         }
 
         .timer-text {
             position: relative;
             z-index: 1;
             text-align: center;
+            color: var(--text-primary);
         }
 
         .timer-text h3 {
@@ -214,6 +235,7 @@
         .timer-text p {
             font-size: 0.9rem;
             opacity: 0.8;
+            color: var(--text-secondary);
         }
 
         .sleep-debt-meter {
@@ -246,6 +268,8 @@
             margin: 2rem 0;
             overflow: hidden;
             border-radius: 10px;
+            background: rgba(0, 0, 0, 0.2);
+            border: 1px solid var(--card-border);
         }
 
         .ripple {
@@ -282,7 +306,8 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s ease;
-            color: white;
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
         }
 
         .sound-btn:hover {
@@ -296,27 +321,6 @@
         }
 
         /* Sleep Planner */
-        .sleep-planner {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 2rem;
-        }
-
-        .planner-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .planner-header h2 {
-            font-size: 1.5rem;
-            font-weight: 500;
-        }
-
         .sand-timer {
             width: 50px;
             height: 80px;
@@ -408,16 +412,26 @@
 
         .rem-input label {
             white-space: nowrap;
+            color: var(--text-secondary);
         }
 
-        .rem-input input {
+        .rem-input input,
+        .rem-input select {
             flex: 1;
             background: rgba(255, 255, 255, 0.1);
-            border: none;
+            border: 1px solid var(--card-border);
             padding: 0.8rem 1rem;
             border-radius: 10px;
-            color: white;
+            color: var(--text-primary);
             font-size: 1rem;
+        }
+
+        .rem-input select {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='white'%3e%3cpath d='M7 10l5 5 5-5z'/%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 1rem center;
+            background-size: 1rem;
         }
 
         .rem-result {
@@ -435,28 +449,11 @@
             color: var(--success);
         }
 
+        .rem-result p {
+            color: var(--text-primary);
+        }
+
         /* Wind Down Assistant */
-        .wind-down {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 2rem;
-        }
-
-        .wind-down-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .wind-down-header h2 {
-            font-size: 1.5rem;
-            font-weight: 500;
-        }
-
         .blue-light-detector {
             display: flex;
             align-items: center;
@@ -466,6 +463,7 @@
             border-radius: 50px;
             margin-bottom: 1.5rem;
             border: 1px solid rgba(233, 69, 132, 0.3);
+            color: var(--text-primary);
         }
 
         .blue-light-detector i {
@@ -496,6 +494,7 @@
             background: rgba(255, 255, 255, 0.05);
             border-radius: 10px;
             transition: all 0.3s ease;
+            border: 1px solid var(--card-border);
         }
 
         .routine-item:hover {
@@ -534,38 +533,21 @@
             font-size: 1rem;
             font-weight: 500;
             margin-bottom: 0.2rem;
+            color: var(--text-primary);
         }
 
         .routine-text p {
             font-size: 0.8rem;
             opacity: 0.7;
+            color: var(--text-secondary);
         }
 
         /* Dream Journal */
-        .dream-journal {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .journal-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .journal-header h2 {
-            font-size: 1.5rem;
-            font-weight: 500;
-        }
-
         .mood-tags {
             display: flex;
             gap: 0.5rem;
             margin-bottom: 1.5rem;
+            flex-wrap: wrap;
         }
 
         .mood-tag {
@@ -575,6 +557,8 @@
             font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            color: var(--text-primary);
+            border: 1px solid var(--card-border);
         }
 
         .mood-tag:hover {
@@ -590,10 +574,10 @@
             width: 100%;
             height: 150px;
             background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--card-border);
             border-radius: 10px;
             padding: 1rem;
-            color: white;
+            color: var(--text-primary);
             font-size: 1rem;
             resize: none;
             margin-bottom: 1rem;
@@ -617,6 +601,7 @@
             transition: all 0.3s ease;
             margin-bottom: 1rem;
             border: 1px solid rgba(106, 90, 205, 0.3);
+            color: var(--text-primary);
         }
 
         .voice-input:hover {
@@ -651,7 +636,7 @@
 
         .cancel-btn {
             background: rgba(255, 255, 255, 0.1);
-            color: white;
+            color: var(--text-primary);
         }
 
         .cancel-btn:hover {
@@ -669,27 +654,6 @@
         }
 
         /* Sleep Tracking */
-        .sleep-tracking {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 2rem;
-        }
-
-        .tracking-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .tracking-header h2 {
-            font-size: 1.5rem;
-            font-weight: 500;
-        }
-
         .sleep-graph {
             width: 100%;
             height: 150px;
@@ -698,6 +662,7 @@
             position: relative;
             margin-bottom: 1.5rem;
             overflow: hidden;
+            border: 1px solid var(--card-border);
         }
 
         .graph-line {
@@ -757,35 +722,16 @@
         .avatar-text h3 {
             font-size: 1.2rem;
             margin-bottom: 0.5rem;
+            color: var(--text-primary);
         }
 
         .avatar-text p {
             font-size: 0.9rem;
             opacity: 0.8;
+            color: var(--text-secondary);
         }
 
         /* Wake Up Optimizer */
-        .wake-up {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 2rem;
-        }
-
-        .wake-up-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .wake-up-header h2 {
-            font-size: 1.5rem;
-            font-weight: 500;
-        }
-
         .alarm-time {
             display: flex;
             align-items: center;
@@ -795,10 +741,10 @@
 
         .alarm-time input {
             background: rgba(255, 255, 255, 0.1);
-            border: none;
+            border: 1px solid var(--card-border);
             padding: 0.8rem 1rem;
             border-radius: 10px;
-            color: white;
+            color: var(--text-primary);
             font-size: 1rem;
             flex: 1;
         }
@@ -825,6 +771,7 @@
             border-radius: 25px;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 1px solid var(--card-border);
         }
 
         .alarm-slider::before {
@@ -859,6 +806,7 @@
             margin-top: 1.5rem;
             position: relative;
             overflow: hidden;
+            border: 1px solid var(--card-border);
         }
 
         .sunrise-gradient {
@@ -881,35 +829,16 @@
             margin-bottom: 0.5rem;
             position: relative;
             z-index: 1;
+            color: white;
         }
 
         .alarm-preview p {
             position: relative;
             z-index: 1;
+            color: white;
         }
 
         /* Lucid Dream Trainer */
-        .lucid-dream {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            margin-bottom: 2rem;
-        }
-
-        .lucid-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .lucid-header h2 {
-            font-size: 1.5rem;
-            font-weight: 500;
-        }
-
         .game-container {
             width: 100%;
             height: 200px;
@@ -917,6 +846,7 @@
             border-radius: 10px;
             position: relative;
             overflow: hidden;
+            border: 1px solid var(--card-border);
         }
 
         .zzz {
@@ -926,6 +856,7 @@
             opacity: 0.8;
             cursor: pointer;
             user-select: none;
+            color: var(--text-primary);
         }
 
         @keyframes float {
@@ -937,29 +868,10 @@
             display: flex;
             justify-content: space-between;
             margin-top: 1rem;
+            color: var(--text-primary);
         }
 
         /* Sleep Sanctuary */
-        .sleep-sanctuary {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 2rem;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-
-        .sanctuary-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .sanctuary-header h2 {
-            font-size: 1.5rem;
-            font-weight: 500;
-        }
-
         .rewards-grid {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -977,6 +889,7 @@
             gap: 0.5rem;
             cursor: pointer;
             transition: all 0.3s ease;
+            border: 1px solid var(--card-border);
         }
 
         .reward-item:hover {
@@ -1007,6 +920,7 @@
         .reward-name {
             font-size: 0.8rem;
             text-align: center;
+            color: var(--text-primary);
         }
 
         .reward-cost {
@@ -1032,19 +946,21 @@
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            background: var(--accent);
+            background: var(--interaction-bg);
             display: flex;
             align-items: center;
             justify-content: center;
             font-size: 1.5rem;
             cursor: pointer;
-            box-shadow: 0 5px 15px rgba(233, 69, 132, 0.4);
             transition: all 0.3s ease;
+            color: white;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: none;
         }
 
         .interaction-btn:hover {
             transform: scale(1.1);
-            box-shadow: 0 8px 20px rgba(233, 69, 132, 0.6);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
         }
 
         .pillow-btn {
@@ -1066,80 +982,78 @@
             100% { transform: rotate(0deg); }
         }
 
-        /* Ad Integration */
-        .ad-container {
+        /* Notification */
+        .notification {
             position: fixed;
-            top: 50%;
+            top: 1rem;
             right: 1rem;
-            transform: translateY(-50%);
-            width: 200px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
+            background: var(--secondary);
+            color: white;
             padding: 1rem;
-            backdrop-filter: blur(5px);
+            border-radius: 10px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-            z-index: 90;
-            transition: all 0.3s ease;
-        }
-
-        .ad-container.collapsed {
-            width: 40px;
-            height: 40px;
-            padding: 0;
+            z-index: 1000;
+            transform: translateX(200%);
+            transition: transform 0.3s ease;
             display: flex;
             align-items: center;
-            justify-content: center;
-            cursor: pointer;
+            gap: 0.5rem;
+            max-width: 300px;
         }
 
-        .ad-container.collapsed .ad-content {
-            display: none;
+        .notification.show {
+            transform: translateX(0);
         }
 
-        .ad-container.collapsed::after {
-            content: '🔼';
+        .notification i {
             font-size: 1.2rem;
         }
 
-        .ad-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.5rem;
-        }
-
-        .ad-close {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1rem;
-            cursor: pointer;
-        }
-
-        .ad-content {
-            font-size: 0.8rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .ad-link {
-            display: inline-block;
-            padding: 0.3rem 0.8rem;
-            background: var(--accent);
-            color: white;
+        /* Ad Container */
+        .ad-frame-container {
+            position: fixed;
+            bottom: 1rem;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 728px;
+            height: 90px;
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 5px;
-            font-size: 0.7rem;
-            text-decoration: none;
-            transition: all 0.3s ease;
+            overflow: hidden;
+            z-index: 90;
+            border: 1px solid var(--card-border);
         }
 
-        .ad-link:hover {
-            background: #d43a75;
+        .ad-frame {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+
+        /* Breathing Animation */
+        .breathing-circle {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(76, 201, 240, 0.8), transparent 70%);
+            margin: 2rem auto;
+            animation: breathe 8s infinite ease-in-out;
+            display: none;
+        }
+
+        @keyframes breathe {
+            0%, 100% { transform: scale(0.8); opacity: 0.7; }
+            50% { transform: scale(1.2); opacity: 1; }
         }
 
         /* Responsive */
         @media (max-width: 1024px) {
             .container {
                 grid-template-columns: 1fr;
+            }
+
+            .ad-frame-container {
+                width: 90%;
             }
         }
 
@@ -1149,11 +1063,7 @@
                 gap: 1rem;
             }
 
-            .dashboard {
-                padding: 1.5rem;
-            }
-
-            .sleep-planner, .wind-down, .dream-journal, .sleep-tracking, .wake-up, .lucid-dream, .sleep-sanctuary {
+            .card {
                 padding: 1.5rem;
             }
 
@@ -1162,7 +1072,7 @@
                 right: 1rem;
             }
 
-            .ad-container {
+            .ad-frame-container {
                 display: none;
             }
         }
@@ -1220,7 +1130,23 @@
         }
 
         /* Black Hole Effects */
-        .black-hole {
+        .black-hole-effect {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+
+        .black-hole-theme .black-hole-effect {
+            opacity: 1;
+        }
+
+        .black-hole-center {
             position: absolute;
             width: 200px;
             height: 200px;
@@ -1230,7 +1156,6 @@
             top: 50%;
             transform: translate(-50%, -50%);
             box-shadow: 0 0 50px rgba(106, 90, 205, 0.5);
-            pointer-events: none;
         }
 
         .accretion-disk {
@@ -1246,7 +1171,6 @@
             top: 50%;
             transform: translate(-50%, -50%) rotateX(80deg);
             animation: rotate-disk 20s linear infinite;
-            pointer-events: none;
         }
 
         @keyframes rotate-disk {
@@ -1256,16 +1180,22 @@
     </style>
 </head>
 <body class="night-sky">
+    <!-- Black Hole Effect -->
+    <div class="black-hole-effect">
+        <div class="black-hole-center"></div>
+        <div class="accretion-disk"></div>
+    </div>
+    
     <!-- Constellation Stars -->
     <div id="constellation"></div>
     
     <!-- Jellyfish -->
-    <div id="jellyfish-container"></div>
+    <div id="jellyfish-container" style="display: none;"></div>
     
-    <!-- Black Hole (hidden by default) -->
-    <div id="black-hole" style="display: none;">
-        <div class="black-hole"></div>
-        <div class="accretion-disk"></div>
+    <!-- Notification -->
+    <div class="notification" id="notification">
+        <i class="fas fa-bell"></i>
+        <span id="notification-text">Notification message</span>
     </div>
     
     <!-- Header -->
@@ -1286,8 +1216,8 @@
         <!-- Left Column -->
         <div class="left-column">
             <!-- Dashboard -->
-            <section class="dashboard">
-                <div class="dashboard-header">
+            <section class="card dashboard">
+                <div class="card-header">
                     <h2>Sleep Dashboard</h2>
                     <div class="moonstones">
                         <i class="fas fa-gem"></i>
@@ -1320,8 +1250,8 @@
             </section>
             
             <!-- Sleep Planner -->
-            <section class="sleep-planner">
-                <div class="planner-header">
+            <section class="card sleep-planner">
+                <div class="card-header">
                     <h2>Smart Sleep Planner</h2>
                 </div>
                 
@@ -1352,8 +1282,8 @@
             </section>
             
             <!-- Wind Down Assistant -->
-            <section class="wind-down">
-                <div class="wind-down-header">
+            <section class="card wind-down">
+                <div class="card-header">
                     <h2>Wind Down Assistant</h2>
                 </div>
                 
@@ -1385,14 +1315,16 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="breathing-circle" id="breathing-circle"></div>
             </section>
         </div>
         
         <!-- Right Column -->
         <div class="right-column">
             <!-- Dream Journal -->
-            <section class="dream-journal">
-                <div class="journal-header">
+            <section class="card dream-journal">
+                <div class="card-header">
                     <h2>Dream Journal</h2>
                 </div>
                 
@@ -1409,17 +1341,17 @@
                     <span>Record Your Dream</span>
                 </div>
                 
-                <textarea class="journal-entry" placeholder="Describe your dream here..."></textarea>
+                <textarea class="journal-entry" placeholder="Describe your dream here..." id="dream-text"></textarea>
                 
                 <div class="journal-actions">
-                    <button class="journal-btn cancel-btn">Cancel</button>
-                    <button class="journal-btn save-btn">Save Dream</button>
+                    <button class="journal-btn cancel-btn" id="cancel-journal">Cancel</button>
+                    <button class="journal-btn save-btn" id="save-journal">Save Dream</button>
                 </div>
             </section>
             
             <!-- Sleep Tracking -->
-            <section class="sleep-tracking">
-                <div class="tracking-header">
+            <section class="card sleep-tracking">
+                <div class="card-header">
                     <h2>Sleep Tracking</h2>
                 </div>
                 
@@ -1431,17 +1363,17 @@
                 </div>
                 
                 <div class="sleep-avatar">
-                    <div class="avatar-icon">🦉</div>
+                    <div class="avatar-icon" id="sleep-avatar-icon">🦉</div>
                     <div class="avatar-text">
-                        <h3>Light Sleeper</h3>
-                        <p>You were awake more than a night watchman!</p>
+                        <h3 id="sleep-avatar-title">Light Sleeper</h3>
+                        <p id="sleep-avatar-desc">You were awake more than a night watchman!</p>
                     </div>
                 </div>
             </section>
             
             <!-- Wake Up Optimizer -->
-            <section class="wake-up">
-                <div class="wake-up-header">
+            <section class="card wake-up">
+                <div class="card-header">
                     <h2>Wake Up Optimizer</h2>
                 </div>
                 
@@ -1461,8 +1393,8 @@
             </section>
             
             <!-- Lucid Dream Trainer -->
-            <section class="lucid-dream">
-                <div class="lucid-header">
+            <section class="card lucid-dream">
+                <div class="card-header">
                     <h2>Lucid Dream Trainer</h2>
                 </div>
                 
@@ -1477,8 +1409,8 @@
             </section>
             
             <!-- Sleep Sanctuary -->
-            <section class="sleep-sanctuary">
-                <div class="sanctuary-header">
+            <section class="card sleep-sanctuary">
+                <div class="card-header">
                     <h2>Sleep Sanctuary</h2>
                 </div>
                 
@@ -1530,20 +1462,26 @@
         </div>
     </div>
     
-    <!-- Ad Integration -->
-    <div class="ad-container" id="ad-container">
-        <div class="ad-header">
-            <span>Sponsored</span>
-            <button class="ad-close" id="ad-close">×</button>
-        </div>
-        <div class="ad-content">
-            Upgrade your sleep with our weighted blanket collection!
-        </div>
-        <a href="#" class="ad-link">Shop Now</a>
+    <!-- Ad Container -->
+    <div class="ad-frame-container">
+        <iframe class="ad-frame" id="ad-frame" scrolling="no"></iframe>
     </div>
     
     <script>
-        // Theme Switching
+        // Notification System
+        function showNotification(message) {
+            const notification = document.getElementById('notification');
+            const notificationText = document.getElementById('notification-text');
+            
+            notificationText.textContent = message;
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Theme Switching with proper text colors
         const themeButtons = document.querySelectorAll('.theme-btn');
         const body = document.body;
         
@@ -1558,23 +1496,23 @@
                 
                 // Show/hide theme-specific elements
                 if (theme === 'black-hole') {
-                    document.getElementById('black-hole').style.display = 'block';
+                    document.body.classList.add('black-hole-theme');
                     document.getElementById('constellation').style.display = 'none';
                     document.getElementById('jellyfish-container').style.display = 'none';
+                    showNotification("Black Hole Theme Activated - Enter the void of sleep");
                 } else if (theme === 'deep-ocean') {
-                    document.getElementById('black-hole').style.display = 'none';
+                    document.body.classList.remove('black-hole-theme');
                     document.getElementById('constellation').style.display = 'none';
                     document.getElementById('jellyfish-container').style.display = 'block';
+                    showNotification("Deep Ocean Theme - Dive into restful waters");
                 } else {
-                    document.getElementById('black-hole').style.display = 'none';
+                    document.body.classList.remove('black-hole-theme');
                     document.getElementById('constellation').style.display = 'block';
                     document.getElementById('jellyfish-container').style.display = 'none';
+                    showNotification("Night Sky Theme - Sleep under the stars");
                 }
             });
         });
-        
-        // Initialize night sky theme
-        document.getElementById('jellyfish-container').style.display = 'none';
         
         // Create constellation
         function createConstellation() {
@@ -1641,7 +1579,7 @@
         createConstellation();
         createJellyfish();
         
-        // Sleep Timer
+        // Sleep Timer with real-time updates
         function updateSleepTimer() {
             const timer = document.getElementById('sleep-timer');
             const now = new Date();
@@ -1696,11 +1634,13 @@
         document.getElementById('wakeup-time').addEventListener('change', () => {
             calculateBedtime();
             updateSleepTimer();
+            showNotification("Bedtime updated based on your wake-up time!");
         });
         
         document.getElementById('sleep-cycles').addEventListener('change', () => {
             calculateBedtime();
             updateSleepTimer();
+            showNotification(`Adjusted for ${document.getElementById('sleep-cycles').value} sleep cycles`);
         });
         
         // Sand Timer Animation
@@ -1711,10 +1651,11 @@
             setTimeout(() => {
                 sandTimer.classList.remove('active');
                 sandTimer.classList.add('moon');
+                showNotification("Bedtime set! Time to wind down.");
             }, 2000);
         });
         
-        // Sound Visualizer
+        // Sound Visualizer with actual sound functionality
         function createRipple() {
             const visualizer = document.getElementById('sound-visualizer');
             const ripple = document.createElement('div');
@@ -1745,65 +1686,129 @@
         // Create ripples periodically
         setInterval(createRipple, 500);
         
-        // Sound Controls
+        // Sound Controls with actual audio
         const soundButtons = document.querySelectorAll('.sound-btn');
+        const audioElements = {};
+        
+        // Initialize audio elements
+        ['rain', 'waves', 'forest', 'white-noise'].forEach(sound => {
+            audioElements[sound] = new Audio(`https://assets.mixkit.co/sfx/preview/mixkit-${sound}-sound-${sound === 'white-noise' ? '1246' : sound === 'forest' ? '1259' : sound === 'waves' ? '1254' : '1260'}.mp3`);
+            audioElements[sound].loop = true;
+        });
+        
         soundButtons.forEach(button => {
             button.addEventListener('click', () => {
+                const sound = button.dataset.sound;
+                
+                // Stop all sounds
+                Object.values(audioElements).forEach(audio => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                });
+                
+                // Play selected sound
+                audioElements[sound].play();
+                
                 soundButtons.forEach(btn => btn.classList.remove('active'));
                 button.classList.add('active');
+                
+                showNotification(`Playing ${sound} sounds`);
             });
         });
         
-        // Blue Light Detector
+        // Blue Light Detector with simulated ambient light check
         function checkAmbientLight() {
             const detector = document.getElementById('blue-light-detector');
             
             // Simulate different light conditions
-            const conditions = ['Low', 'Moderate', 'High'];
+            const conditions = [
+                { level: 'Low', pulse: false, icon: 'fa-lightbulb', message: 'Blue Light: Low' },
+                { level: 'Moderate', pulse: false, icon: 'fa-lightbulb', message: 'Blue Light: Moderate' },
+                { level: 'High', pulse: true, icon: 'fa-exclamation-triangle', message: 'Blue Light: High - Reduce Exposure!' }
+            ];
+            
             const randomCondition = conditions[Math.floor(Math.random() * conditions.length)];
             
-            if (randomCondition === 'High') {
+            if (randomCondition.pulse) {
                 detector.classList.add('pulse');
-                detector.innerHTML = `<i class="fas fa-lightbulb"></i><span>Blue Light: High - Reduce Exposure!</span>`;
             } else {
                 detector.classList.remove('pulse');
-                detector.innerHTML = `<i class="fas fa-lightbulb"></i><span>Blue Light: ${randomCondition}</span>`;
             }
+            
+            detector.innerHTML = `<i class="fas ${randomCondition.icon}"></i><span>${randomCondition.message}</span>`;
         }
         
         // Check light periodically
         setInterval(checkAmbientLight, 5000);
         checkAmbientLight(); // Initial check
         
-        // Dream Journal Voice Input
+        // Dream Journal with voice recognition
         const voiceInput = document.getElementById('voice-input');
-        const journalEntry = document.querySelector('.journal-entry');
+        const journalEntry = document.getElementById('dream-text');
+        
+        // Check if browser supports speech recognition
+        const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+        let recognition;
+        
+        if (SpeechRecognition) {
+            recognition = new SpeechRecognition();
+            recognition.continuous = false;
+            recognition.interimResults = false;
+            recognition.lang = 'en-US';
+            
+            recognition.onresult = (event) => {
+                const transcript = event.results[0][0].transcript;
+                journalEntry.value = transcript;
+                voiceInput.innerHTML = `<i class="fas fa-microphone"></i><span>Recording Complete</span>`;
+                
+                setTimeout(() => {
+                    voiceInput.innerHTML = `<i class="fas fa-microphone"></i><span>Record Your Dream</span>`;
+                    voiceInput.classList.remove('recording');
+                }, 2000);
+            };
+            
+            recognition.onerror = (event) => {
+                console.error('Speech recognition error', event.error);
+                voiceInput.innerHTML = `<i class="fas fa-microphone"></i><span>Error: ${event.error}</span>`;
+                setTimeout(() => {
+                    voiceInput.innerHTML = `<i class="fas fa-microphone"></i><span>Record Your Dream</span>`;
+                    voiceInput.classList.remove('recording');
+                }, 2000);
+            };
+        }
         
         voiceInput.addEventListener('click', () => {
             if (!voiceInput.classList.contains('recording')) {
-                voiceInput.classList.add('recording');
-                voiceInput.innerHTML = `<i class="fas fa-microphone"></i><span>Listening... Speak now</span>`;
-                
-                // Simulate speech recognition
-                setTimeout(() => {
-                    const dreamTexts = [
-                        "I was flying over a city made of glass...",
-                        "There was a talking cat who gave me advice...",
-                        "I found myself in a library with endless corridors...",
-                        "I was searching for something important but couldn't remember what...",
-                        "All my teeth fell out and then grew back as candy...",
-                    ];
-                    
-                    const randomDream = dreamTexts[Math.floor(Math.random() * dreamTexts.length)];
-                    journalEntry.value = randomDream;
-                    
-                    voiceInput.classList.remove('recording');
-                    voiceInput.innerHTML = `<i class="fas fa-microphone"></i><span>Recording Complete</span>`;
+                if (SpeechRecognition) {
+                    voiceInput.classList.add('recording');
+                    voiceInput.innerHTML = `<i class="fas fa-microphone"></i><span>Listening... Speak now</span>`;
+                    recognition.start();
+                } else {
+                    showNotification("Voice recognition not supported in your browser");
+                    // Fallback to simulated voice input
+                    voiceInput.classList.add('recording');
+                    voiceInput.innerHTML = `<i class="fas fa-microphone"></i><span>Listening... Speak now</span>`;
                     
                     setTimeout(() => {
-                        voiceInput.innerHTML = `<i class="fas fa-microphone"></i><span>Record Your Dream</span>`;
-                    }, 2000);
-                }, 3000);
+                        const dreamTexts = [
+                            "I was flying over a city made of glass...",
+                            "There was a talking cat who gave me advice...",
+                            "I found myself in a library with endless corridors...",
+                            "I was searching for something important but couldn't remember what...",
+                            "All my teeth fell out and then grew back as candy...",
+                        ];
+                        
+                        const randomDream = dreamTexts[Math.floor(Math.random() * dreamTexts.length)];
+                        journalEntry.value = randomDream;
+                        
+                        voiceInput.classList.remove('recording');
+                        voiceInput.innerHTML = `<i class="fas fa-microphone"></i><span>Recording Complete</span>`;
+                        
+                        setTimeout(() => {
+                            voiceInput.innerHTML = `<i class="fas fa-microphone"></i><span>Record Your Dream</span>`;
+                        }, 2000);
+                    }, 3000);
+                }
             }
         });
         
@@ -1816,19 +1821,67 @@
             });
         });
         
-        // Sleep Graph
+        // Journal Actions
+        document.getElementById('cancel-journal').addEventListener('click', () => {
+            journalEntry.value = '';
+            showNotification("Dream journal cleared");
+        });
+        
+        document.getElementById('save-journal').addEventListener('click', () => {
+            if (journalEntry.value.trim()) {
+                showNotification("Dream saved successfully!");
+                // Here you would typically save to a database
+                
+                // Award moonstones for journaling
+                const currentMoonstones = parseInt(document.getElementById('moonstone-count').textContent);
+                document.getElementById('moonstone-count').textContent = currentMoonstones + 5;
+            } else {
+                showNotification("Please enter a dream description");
+            }
+        });
+        
+        // Sleep Graph with realistic data
         function generateSleepGraph() {
             const graph = document.getElementById('sleep-graph');
             graph.innerHTML = '';
             
-            // Generate random sleep data
+            // Generate realistic sleep data
+            const sleepPhases = ['deep', 'light', 'rem', 'awake'];
+            let currentPhase = 0;
+            let phaseDuration = Math.floor(Math.random() * 3) + 2;
+            let phaseCount = 0;
+            
             for (let i = 0; i < 30; i++) {
                 const bar = document.createElement('div');
                 bar.className = 'graph-bar';
                 
-                // Random height for demo (represents sleep depth)
-                const height = Math.random() * 100;
+                // Change phase occasionally
+                if (phaseCount >= phaseDuration) {
+                    currentPhase = (currentPhase + 1) % sleepPhases.length;
+                    phaseDuration = Math.floor(Math.random() * 3) + 2;
+                    phaseCount = 0;
+                }
+                phaseCount++;
+                
+                // Set height based on sleep phase
+                let height;
+                switch(sleepPhases[currentPhase]) {
+                    case 'deep':
+                        height = 80 + Math.random() * 20;
+                        break;
+                    case 'light':
+                        height = 40 + Math.random() * 30;
+                        break;
+                    case 'rem':
+                        height = 60 + Math.random() * 20;
+                        break;
+                    case 'awake':
+                        height = 10 + Math.random() * 10;
+                        break;
+                }
+                
                 bar.style.height = `${height}%`;
+                bar.dataset.phase = sleepPhases[currentPhase];
                 
                 // Random animation delay for staggered appearance
                 bar.style.animationDelay = `${i * 0.05}s`;
@@ -1836,42 +1889,112 @@
                 graph.appendChild(bar);
             }
             
-            // Update avatar based on sleep quality (random for demo)
-            const avatarIcon = document.querySelector('.avatar-icon');
-            const avatarTitle = document.querySelector('.avatar-text h3');
-            const avatarDesc = document.querySelector('.avatar-text p');
+            // Calculate sleep quality
+            const bars = document.querySelectorAll('.graph-bar');
+            let deepSleep = 0, lightSleep = 0, remSleep = 0, awake = 0;
             
-            const sleepTypes = [
-                { icon: '🦉', title: 'Light Sleeper', desc: 'You were awake more than a night watchman!' },
-                { icon: '🐨', title: 'Deep Sleeper', desc: 'Koala-level rest achieved!' },
-                { icon: '🦊', title: 'Balanced Sleeper', desc: 'A good mix of deep and light sleep' },
-                { icon: '🦇', title: 'Night Owl', desc: 'You thrive when the moon is high' }
-            ];
+            bars.forEach(bar => {
+                switch(bar.dataset.phase) {
+                    case 'deep': deepSleep++; break;
+                    case 'light': lightSleep++; break;
+                    case 'rem': remSleep++; break;
+                    case 'awake': awake++; break;
+                }
+            });
             
-            const randomSleep = sleepTypes[Math.floor(Math.random() * sleepTypes.length)];
-            avatarIcon.textContent = randomSleep.icon;
-            avatarTitle.textContent = randomSleep.title;
-            avatarDesc.textContent = randomSleep.desc;
+            // Update avatar based on sleep quality
+            const avatarIcon = document.getElementById('sleep-avatar-icon');
+            const avatarTitle = document.getElementById('sleep-avatar-title');
+            const avatarDesc = document.getElementById('sleep-avatar-desc');
+            
+            let sleepType;
+            if (awake > 8) {
+                sleepType = { icon: '🦉', title: 'Light Sleeper', desc: 'You were awake more than a night watchman!' };
+            } else if (deepSleep > 10) {
+                sleepType = { icon: '🐨', title: 'Deep Sleeper', desc: 'Koala-level rest achieved!' };
+            } else if (remSleep > 6) {
+                sleepType = { icon: '🦊', title: 'Dream Explorer', desc: 'Vivid dreams and good REM sleep' };
+            } else {
+                sleepType = { icon: '🦇', title: 'Night Owl', desc: 'You thrive when the moon is high' };
+            }
+            
+            avatarIcon.textContent = sleepType.icon;
+            avatarTitle.textContent = sleepType.title;
+            avatarDesc.textContent = sleepType.desc;
+            
+            // Award moonstones based on sleep quality
+            const moonstones = Math.floor((deepSleep * 2 + remSleep * 1.5 + lightSleep) / 5);
+            if (moonstones > 0) {
+                const currentMoonstones = parseInt(document.getElementById('moonstone-count').textContent);
+                document.getElementById('moonstone-count').textContent = currentMoonstones + moonstones;
+                showNotification(`+${moonstones} Moonstones for good sleep!`);
+            }
         }
         
         generateSleepGraph();
         
-        // Alarm Toggle
+        // Alarm System with notifications
         const alarmToggle = document.getElementById('alarm-toggle');
         const alarmPreview = document.getElementById('alarm-preview');
+        let alarmTimeout;
+        
+        function checkAlarm() {
+            const now = new Date();
+            const alarmTime = document.getElementById('alarm-time').value;
+            const [alarmHours, alarmMinutes] = alarmTime.split(':').map(Number);
+            
+            if (alarmToggle.checked && 
+                now.getHours() === alarmHours && 
+                now.getMinutes() === alarmMinutes) {
+                
+                // Trigger alarm
+                alarmPreview.classList.add('active');
+                
+                // Show notification
+                if (Notification.permission === 'granted') {
+                    new Notification('Dream Sanctuary', {
+                        body: 'Good morning! Time to wake up gently',
+                        icon: 'https://cdn-icons-png.flaticon.com/512/3163/3163478.png'
+                    });
+                } else if (Notification.permission !== 'denied') {
+                    Notification.requestPermission().then(permission => {
+                        if (permission === 'granted') {
+                            new Notification('Dream Sanctuary', {
+                                body: 'Good morning! Time to wake up gently',
+                                icon: 'https://cdn-icons-png.flaticon.com/512/3163/3163478.png'
+                            });
+                        }
+                    });
+                }
+                
+                // Turn off alarm after 1 minute
+                setTimeout(() => {
+                    alarmPreview.classList.remove('active');
+                }, 60000);
+            }
+        }
+        
+        // Check alarm every minute
+        setInterval(checkAlarm, 60000);
         
         alarmToggle.addEventListener('change', () => {
             if (alarmToggle.checked) {
                 alarmPreview.classList.add('active');
+                setTimeout(() => {
+                    alarmPreview.classList.remove('active');
+                }, 2000);
+                showNotification("Alarm set for " + document.getElementById('alarm-time').value);
             } else {
                 alarmPreview.classList.remove('active');
+                showNotification("Alarm turned off");
             }
         });
         
-        // Lucid Dream Game
+        // Lucid Dream Game with proper scoring
         let gameScore = 0;
         let gameTime = 30;
         let gameInterval;
+        let zzzInterval;
         
         function startGame() {
             gameScore = 0;
@@ -1881,6 +2004,10 @@
             
             const gameContainer = document.getElementById('game-container');
             gameContainer.innerHTML = '';
+            
+            // Remove any existing restart button
+            const existingBtn = document.querySelector('.game-score button');
+            if (existingBtn) existingBtn.remove();
             
             // Create Zzz's
             function createZzz() {
@@ -1894,7 +2021,13 @@
                 zzz.addEventListener('click', () => {
                     gameScore++;
                     document.getElementById('game-score').textContent = gameScore;
-                    zzz.remove();
+                    
+                    // Add visual feedback
+                    zzz.style.transform = 'scale(1.5)';
+                    zzz.style.opacity = '0';
+                    setTimeout(() => {
+                        zzz.remove();
+                    }, 300);
                 });
                 
                 gameContainer.appendChild(zzz);
@@ -1908,7 +2041,7 @@
             }
             
             // Create Zzz's periodically
-            const zzzInterval = setInterval(createZzz, 800);
+            zzzInterval = setInterval(createZzz, 800);
             
             // Game timer
             gameInterval = setInterval(() => {
@@ -1925,25 +2058,18 @@
                         const currentMoonstones = parseInt(document.getElementById('moonstone-count').textContent);
                         document.getElementById('moonstone-count').textContent = currentMoonstones + moonstones;
                         
-                        // Show notification
-                        const notification = document.createElement('div');
-                        notification.textContent = `+${moonstones} Moonstones Earned!`;
-                        notification.style.position = 'absolute';
-                        notification.style.top = '50%';
-                        notification.style.left = '50%';
-                        notification.style.transform = 'translate(-50%, -50%)';
-                        notification.style.backgroundColor = 'rgba(106, 90, 205, 0.9)';
-                        notification.style.padding = '1rem 2rem';
-                        notification.style.borderRadius = '10px';
-                        notification.style.zIndex = '100';
-                        notification.style.animation = 'fadeOut 2s forwards 2s';
-                        
-                        gameContainer.appendChild(notification);
-                        
-                        setTimeout(() => {
-                            notification.remove();
-                        }, 4000);
+                        showNotification(`+${moonstones} Moonstones Earned!`);
                     }
+                    
+                    // Show restart button
+                    const restartBtn = document.createElement('button');
+                    restartBtn.textContent = 'Play Again';
+                    restartBtn.className = 'journal-btn save-btn';
+                    restartBtn.style.margin = '1rem auto';
+                    restartBtn.style.display = 'block';
+                    restartBtn.addEventListener('click', startGame);
+                    
+                    document.querySelector('.game-score').appendChild(restartBtn);
                 }
             }, 1000);
         }
@@ -1971,6 +2097,7 @@
             
             // Scroll to sleep planner
             document.querySelector('.sleep-planner').scrollIntoView({ behavior: 'smooth' });
+            showNotification("Set your bedtime schedule");
         });
         
         blanketBtn.addEventListener('click', () => {
@@ -1979,50 +2106,82 @@
                 blanketBtn.style.transform = '';
             }, 300);
             
+            // Show breathing exercise
+            const breathingCircle = document.getElementById('breathing-circle');
+            breathingCircle.style.display = 'block';
+            
             // Scroll to wind down assistant
             document.querySelector('.wind-down').scrollIntoView({ behavior: 'smooth' });
+            showNotification("Start your wind-down routine");
+            
+            // Hide after some time
+            setTimeout(() => {
+                breathingCircle.style.display = 'none';
+            }, 10000);
         });
         
-        // Ad Integration
-        const adContainer = document.getElementById('ad-container');
-        const adClose = document.getElementById('ad-close');
-        
-        adClose.addEventListener('click', () => {
-            adContainer.classList.add('collapsed');
+        // Routine Checkboxes
+        const routineCheckboxes = document.querySelectorAll('.routine-checkbox');
+        routineCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('click', () => {
+                checkbox.classList.toggle('checked');
+                
+                if (checkbox.classList.contains('checked')) {
+                    const routineText = checkbox.nextElementSibling.querySelector('h4').textContent;
+                    showNotification(`Completed: ${routineText}`);
+                    
+                    // Award moonstones for completing routines
+                    const currentMoonstones = parseInt(document.getElementById('moonstone-count').textContent);
+                    document.getElementById('moonstone-count').textContent = currentMoonstones + 2;
+                }
+            });
         });
         
-        adContainer.addEventListener('click', () => {
-            if (adContainer.classList.contains('collapsed')) {
-                adContainer.classList.remove('collapsed');
-            }
+        // Reward Items
+        const rewardItems = document.querySelectorAll('.reward-item');
+        rewardItems.forEach(item => {
+            item.addEventListener('click', () => {
+                if (!item.classList.contains('locked')) {
+                    showNotification(`Selected: ${item.querySelector('.reward-name').textContent}`);
+                } else {
+                    const cost = parseInt(item.querySelector('.reward-cost').textContent.match(/\d+/)[0]);
+                    const currentMoonstones = parseInt(document.getElementById('moonstone-count').textContent);
+                    
+                    if (currentMoonstones >= cost) {
+                        if (confirm(`Unlock this feature for ${cost} Moonstones?`)) {
+                            document.getElementById('moonstone-count').textContent = currentMoonstones - cost;
+                            item.classList.remove('locked');
+                            item.removeAttribute('title');
+                            showNotification(`Unlocked: ${item.querySelector('.reward-name').textContent}`);
+                            
+                            // Special handling for black hole theme
+                            if (item.querySelector('.reward-icon').textContent === '🕳️') {
+                                showNotification("Black Hole Theme unlocked! Change to it in the theme selector");
+                            }
+                        }
+                    } else {
+                        showNotification(`You need ${cost - currentMoonstones} more Moonstones to unlock this`);
+                    }
+                }
+            });
         });
         
-        // Collapse ad when wind down starts (simulated)
-        document.querySelector('.wind-down').addEventListener('click', () => {
-            adContainer.classList.add('collapsed');
-        });
+        // Initialize ad frame
+        document.getElementById('ad-frame').src = `//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.html`;
         
         // Initialize
         updateSleepTimer();
+        setInterval(updateSleepTimer, 60000); // Update every minute
         
-        // Ad Script (as provided)
-        const adScript = document.createElement('script');
-        adScript.type = 'text/javascript';
-        adScript.text = `
-            atOptions = {
-                'key' : '43e2bb13f24806c283fb098cfdb2d204',
-                'format' : 'iframe',
-                'height' : 90,
-                'width' : 728,
-                'params' : {}
-            };
-        `;
-        document.head.appendChild(adScript);
+        // Request notification permission
+        if (Notification.permission !== 'granted' && Notification.permission !== 'denied') {
+            Notification.requestPermission();
+        }
         
-        const invokeScript = document.createElement('script');
-        invokeScript.type = 'text/javascript';
-        invokeScript.src = '//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.js';
-        document.head.appendChild(invokeScript);
+        // Show welcome message
+        setTimeout(() => {
+            showNotification("Welcome to Dream Sanctuary! Start optimizing your sleep today.");
+        }, 1000);
     </script>
 </body>
 </html>
