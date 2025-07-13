@@ -6,24 +6,108 @@
     <title>🚀 MindForge | Brain Training Tools</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body {
+        :root {
+            --primary: #6C63FF;
+            --secondary: #4D8BFF;
+            --accent: #FF6584;
+            --dark: #1A1A2E;
+            --light: #F8F9FA;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
             font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
             background-color: #fefefe;
             color: #333;
             overflow-x: hidden;
             position: relative;
         }
         
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        /* Header - Fixed at top */
+        .header {
+            background: white;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 100;
+            padding: 1rem 2rem;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
         }
         
+        .header.hidden {
+            transform: translateY(-100%);
+        }
+        
+        .logo {
+            background: linear-gradient(135deg, #6C63FF, #FF6584);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 800;
+            letter-spacing: -0.5px;
+        }
+        
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #f5f7fa 0%, #e2e8f0 100%);
+            position: relative;
+            overflow: hidden;
+            padding: 8rem 2rem 6rem;
+            margin-top: 80px; /* Space for fixed header */
+        }
+        
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 20% 50%, rgba(108, 99, 255, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+            z-index: 0;
+            animation: pulse 15s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 0.3; }
+            50% { transform: scale(1.1); opacity: 0.1; }
+            100% { transform: scale(1); opacity: 0.3; }
+        }
+        
+        .typing-container {
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+        
+        .typing-text {
+            position: absolute;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            font-weight: 500;
+            color: #555;
+        }
+        
+        .typing-text.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Tool Cards */
         .tool-card {
             transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
             transform: translateY(0);
@@ -32,6 +116,16 @@
             position: relative;
             overflow: hidden;
             border-radius: 16px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            cursor: pointer;
+        }
+        
+        .tool-card.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
         
         .tool-card::before {
@@ -41,15 +135,15 @@
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, #FF6B6B, #FF9A3C, #FFD166);
+            background: linear-gradient(90deg, #6C63FF, #4D8BFF);
             transform: scaleX(0);
             transform-origin: left;
             transition: transform 0.6s ease;
         }
         
         .tool-card:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
         }
         
         .tool-card:hover::before {
@@ -57,97 +151,20 @@
         }
         
         .tool-icon {
-            transition: all 0.5s ease;
-            filter: drop-shadow(0 6px 10px rgba(0, 0, 0, 0.15));
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 12px;
+            font-size: 1.8rem;
+            margin-bottom: 15px;
+            transition: all 0.4s ease;
+            background: linear-gradient(135deg, rgba(108, 99, 255, 0.1), rgba(77, 139, 255, 0.1));
         }
         
         .tool-card:hover .tool-icon {
-            transform: scale(1.2) rotate(8deg);
-            animation: bounce 0.8s ease infinite alternate;
-        }
-        
-        @keyframes bounce {
-            0% { transform: translateY(0) scale(1.2) rotate(8deg); }
-            100% { transform: translateY(-10px) scale(1.2) rotate(8deg); }
-        }
-        
-        .open-btn {
-            background: linear-gradient(135deg, #FF6B6B, #FF9A3C);
-            background-size: 200% auto;
-            transition: all 0.4s ease;
-            box-shadow: 0 6px 20px rgba(255, 105, 107, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .open-btn:hover {
-            background-position: right center;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 105, 107, 0.5);
-        }
-        
-        .open-btn::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(
-                to bottom right,
-                rgba(255, 255, 255, 0.3),
-                rgba(255, 255, 255, 0)
-            );
-            transform: rotate(30deg);
-            transition: all 0.5s ease;
-        }
-        
-        .open-btn:hover::after {
-            left: 100%;
-        }
-        
-        .typewriter {
-            overflow: hidden;
-            white-space: nowrap;
-            border-right: 3px solid #FF6B6B;
-            animation: typing 1.8s steps(14) 1s 1 normal both,
-                       blink 0.75s step-end infinite;
-            display: inline-block;
-        }
-        
-        @keyframes typing {
-            from { width: 0 }
-            to { width: 100% }
-        }
-        
-        @keyframes blink {
-            from, to { border-color: transparent }
-            50% { border-color: #FF6B6B }
-        }
-        
-        .floating {
-            animation: floating 4s ease-in-out infinite;
-        }
-        
-        @keyframes floating {
-            0% { transform: translateY(0px); }
-            50% { transform: translateY(-15px); }
-            100% { transform: translateY(0px); }
-        }
-        
-        .particle {
-            position: absolute;
-            background: rgba(255, 107, 107, 0.6);
-            border-radius: 50%;
-            pointer-events: none;
-        }
-        
-        .hero-gradient {
-            background: linear-gradient(135deg, #f5f7fa 0%, #ffffff 100%);
-        }
-        
-        .glow-text {
-            text-shadow: 0 0 10px rgba(255, 107, 107, 0.3);
+            transform: scale(1.1) rotate(5deg);
         }
         
         /* Section Headers */
@@ -164,7 +181,7 @@
             left: 0;
             width: 60px;
             height: 4px;
-            background: linear-gradient(90deg, #FF6B6B, #FF9A3C);
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
             border-radius: 2px;
         }
         
@@ -174,7 +191,7 @@
             bottom: 20px;
             right: 20px;
             z-index: 50;
-            background: linear-gradient(135deg, #FF6B6B, #FF9A3C);
+            background: #6C63FF;
             color: white;
             width: 50px;
             height: 50px;
@@ -182,21 +199,51 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 6px 20px rgba(255, 105, 107, 0.4);
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
             cursor: pointer;
             transition: all 0.3s ease;
         }
         
         .view-toggle:hover {
             transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(255, 105, 107, 0.5);
+            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
         }
         
         .view-toggle:active {
             transform: translateY(1px);
         }
         
-        /* Popup Styles */
+        /* Desktop Mode Transition */
+        .desktop-mode-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: white;
+            z-index: 99999;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        
+        .desktop-mode-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+        
+        .desktop-mode-text {
+            margin-top: 20px;
+            font-size: 1.2rem;
+            color: #555;
+            text-align: center;
+        }
+        
+        /* Popup Styles - SAFE AD CONTAINER */
         .popup-overlay {
             display: none;
             position: fixed;
@@ -253,6 +300,7 @@
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
         
+        /* SAFE AD FRAME - prevents unwanted redirects */
         .ad-frame {
             width: 100%;
             height: 100%;
@@ -260,6 +308,7 @@
             background: #fff;
             opacity: 0;
             transition: opacity 0.8s ease-out;
+            /* Security measures */
             sandbox="allow-scripts allow-same-origin allow-popups allow-forms" 
             allow="autoplay 'none'; fullscreen 'none'"
         }
@@ -291,9 +340,9 @@
         .loader {
             width: 50px;
             height: 50px;
-            border: 3px solid rgba(255, 107, 107, 0.1);
+            border: 3px solid rgba(108, 99, 255, 0.1);
             border-radius: 50%;
-            border-top-color: #FF6B6B;
+            border-top-color: #6C63FF;
             animation: spin 1.2s ease infinite;
             margin-bottom: 20px;
         }
@@ -330,22 +379,22 @@
             min-width: 25px;
             text-align: center;
             font-weight: 600;
-            color: #FF6B6B;
+            color: #6C63FF;
             transition: all 0.3s ease;
         }
         
         .skip-btn {
             padding: 10px 24px;
             background: #fff;
-            color: #FF6B6B;
-            border: 1px solid #FF6B6B;
+            color: #6C63FF;
+            border: 1px solid #6C63FF;
             border-radius: 8px;
             cursor: pointer;
             font-size: 14px;
             font-weight: 600;
             display: none;
             transition: all 0.3s ease;
-            box-shadow: 0 2px 10px rgba(255, 107, 107, 0.1);
+            box-shadow: 0 2px 10px rgba(108, 99, 255, 0.1);
             opacity: 0;
             transform: translateX(10px);
         }
@@ -357,9 +406,9 @@
         }
         
         .skip-btn:hover {
-            background: #FF6B6B;
+            background: #6C63FF;
             color: white;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.2);
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.2);
         }
         
         .skip-btn:active {
@@ -375,7 +424,7 @@
         
         .progress-bar {
             height: 100%;
-            background: linear-gradient(90deg, #FF6B6B, #FF9A3C);
+            background: linear-gradient(90deg, #6C63FF, #4D8BFF);
             width: 0%;
             transition: width 1s linear;
             position: relative;
@@ -406,7 +455,7 @@
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            background: rgba(255, 107, 107, 0.9);
+            background: rgba(108, 99, 255, 0.9);
             backdrop-filter: blur(5px);
             padding: 10px 20px;
             border-radius: 30px;
@@ -415,7 +464,7 @@
             opacity: 0;
             transition: opacity 0.3s ease, bottom 0.3s ease;
             z-index: 3;
-            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+            box-shadow: 0 4px 15px rgba(108, 99, 255, 0.3);
         }
         
         .thank-you-notification.show {
@@ -423,9 +472,31 @@
             bottom: 30px;
         }
         
+        /* Ad Spaces */
+        .ad-space {
+            background: #f8f9fa;
+            border: 1px dashed #cbd5e1;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            margin: 40px 0;
+            min-height: 90px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease-out;
+        }
+        
+        .ad-space.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
         /* Footer */
         .footer {
-            background: #1A1A2E;
+            background: var(--dark);
             color: white;
             position: relative;
             overflow: hidden;
@@ -439,15 +510,9 @@
             left: 0;
             width: 100%;
             height: 4px;
-            background: linear-gradient(90deg, #FF6B6B, #FF9A3C, #FFD166);
+            background: linear-gradient(90deg, #6C63FF, #4D8BFF, #FF6584);
             background-size: 300% 300%;
             animation: gradient 6s ease infinite;
-        }
-        
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
         
         .social-links {
@@ -514,54 +579,61 @@
                 font-size: 1.8rem;
             }
         }
+        
+        /* Desktop mode class */
+        .desktop-mode {
+            max-width: 1200px;
+            margin: 0 auto;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            position: relative;
+            min-height: 100vh;
+        }
     </style>
 </head>
-<body class="min-h-screen antialiased relative overflow-x-hidden">
-    <!-- Animated Background Particles -->
-    <div id="particles-js"></div>
-
-    <!-- Navigation -->
-    <nav class="glass-card fixed w-full py-4 px-6 z-50">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-2 animate__animated animate__fadeInDown">
+<body>
+    <!-- Header - Fixed at top -->
+    <header class="header" id="mainHeader">
+        <div class="flex justify-between items-center max-w-6xl mx-auto">
+            <div class="flex items-center space-x-2">
                 <span class="text-3xl">🧠</span>
-                <span class="text-2xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent glow-text">MindForge</span>
+                <h1 class="text-2xl logo">MindForge</h1>
             </div>
             <button id="mobileToggle" class="md:hidden text-2xl">
                 <i class="fas fa-bars"></i>
             </button>
         </div>
-    </nav>
+    </header>
+
+    <!-- Desktop Mode Transition Screen -->
+    <div class="desktop-mode-transition" id="desktopTransition">
+        <div class="loader"></div>
+        <div class="desktop-mode-text">
+            Initializing Desktop Mode<br>for better experience...
+        </div>
+    </div>
 
     <!-- Hero Section -->
-    <section class="hero-gradient pt-32 pb-20 px-6 relative overflow-hidden">
+    <section class="hero">
         <div class="max-w-4xl mx-auto text-center relative z-10">
-            <h1 class="text-5xl md:text-7xl font-bold mb-6 animate__animated animate__fadeIn">
-                <span class="typewriter inline-block">Boost Your Brain</span>
+            <h1 class="text-3xl md:text-4xl font-bold mb-6 animate__animated animate__fadeInDown">
+                Boost Your Brain Power
             </h1>
-            <p class="text-xl md:text-2xl text-gray-600 mb-10 max-w-2xl mx-auto animate__animated animate__fadeIn animate__delay-1s">
-                25+ Cognitive Enhancement Tools for Students & Professionals
-            </p>
-            <div class="flex justify-center space-x-4 animate__animated animate__fadeIn animate__delay-1s">
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium text-lg">
-                    Explore Tools ↓
-                </button>
+            <div class="typing-container">
+                <p class="typing-text active">25+ Cognitive Enhancement Tools</p>
+                <p class="typing-text">For Students & Professionals</p>
+                <p class="typing-text">Memory • Focus • Performance</p>
             </div>
         </div>
-        
-        <!-- Floating animated elements -->
-        <div class="absolute top-20 left-10 text-4xl opacity-20 animate-float" style="animation-delay: 0.5s">⚡</div>
-        <div class="absolute bottom-20 right-10 text-5xl opacity-20 animate-float" style="animation-delay: 1s">🌟</div>
     </section>
 
     <!-- ==================== BRAIN TOOLS ==================== -->
-    <section class="max-w-6xl mx-auto px-6 py-16 relative z-10">
+    <section class="max-w-6xl mx-auto px-6 py-16">
         <div class="section-header">
             <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-xl">
+                <div class="w-12 h-12 rounded-full bg-indigo-100 flex items-center justify-center text-indigo-600 text-xl">
                     🧠
                 </div>
-                <h2 class="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
                     Brain Training
                 </h2>
             </div>
@@ -571,47 +643,58 @@
             Enhance your cognitive abilities with these scientifically-designed tools.
         </p>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Tool 1 - Memory Matrix -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp">
-                <div class="tool-icon text-7xl mb-6 floating">🧩</div>
-                <h3 class="text-2xl font-bold mb-3">Memory Matrix</h3>
+            <div class="tool-card p-6" data-tool="memoryMatrix">
+                <div class="tool-icon bg-indigo-100 text-indigo-600">
+                    🧩
+                </div>
+                <h3 class="text-xl font-bold mb-3">Memory Matrix</h3>
                 <p class="text-gray-500 mb-6">Challenge your short-term memory with pattern recognition tasks.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
             
             <!-- Tool 2 - Focus Blitz -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
-                <div class="tool-icon text-7xl mb-6 floating">⚡</div>
-                <h3 class="text-2xl font-bold mb-3">Focus Blitz</h3>
+            <div class="tool-card p-6" data-tool="focusBlitz" style="transition-delay: 0.1s">
+                <div class="tool-icon bg-blue-100 text-blue-600">
+                    ⚡
+                </div>
+                <h3 class="text-xl font-bold mb-3">Focus Blitz</h3>
                 <p class="text-gray-500 mb-6">Timed concentration drills with increasing difficulty.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
             
             <!-- Tool 3 - Dual N-Back Pro -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
-                <div class="tool-icon text-7xl mb-6 floating">🔢</div>
-                <h3 class="text-2xl font-bold mb-3">Dual N-Back Pro</h3>
+            <div class="tool-card p-6" data-tool="dualNBack" style="transition-delay: 0.2s">
+                <div class="tool-icon bg-purple-100 text-purple-600">
+                    🔢
+                </div>
+                <h3 class="text-xl font-bold mb-3">Dual N-Back Pro</h3>
                 <p class="text-gray-500 mb-6">Gold standard working memory training.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
+        </div>
+        
+        <!-- Ad Space -->
+        <div class="ad-space mt-12 visible">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '43e2bb13f24806c283fb098cfdb2d204',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.js"></script>
         </div>
     </section>
 
     <!-- ==================== STUDY TOOLS ==================== -->
-    <section class="max-w-6xl mx-auto px-6 py-16 relative z-10">
+    <section class="max-w-6xl mx-auto px-6 py-16">
         <div class="section-header">
             <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-xl">
+                <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xl">
                     📚
                 </div>
-                <h2 class="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-green-600 to-teal-600 bg-clip-text text-transparent">
                     Study Tools
                 </h2>
             </div>
@@ -621,47 +704,58 @@
             Specialized tools designed to help students excel in competitive exams.
         </p>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Tool 1 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp">
-                <div class="tool-icon text-7xl mb-6 floating">🧬</div>
-                <h3 class="text-2xl font-bold mb-3">NEET Rank Predictor</h3>
+            <div class="tool-card p-6" data-tool="neetBio">
+                <div class="tool-icon bg-green-100 text-green-600">
+                    🧬
+                </div>
+                <h3 class="text-xl font-bold mb-3">NEET Rank Predictor</h3>
                 <p class="text-gray-500 mb-6">Accurate Marks & Rank Analysis.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
             
             <!-- Tool 2 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
-                <div class="tool-icon text-7xl mb-6 floating">∫</div>
-                <h3 class="text-2xl font-bold mb-3">JEE Prep Analyzer</h3>
+            <div class="tool-card p-6" data-tool="jeeMath" style="transition-delay: 0.1s">
+                <div class="tool-icon bg-teal-100 text-teal-600">
+                    ∫
+                </div>
+                <h3 class="text-xl font-bold mb-3">JEE Prep Analyzer</h3>
                 <p class="text-gray-500 mb-6">AI-Powered Performance Analysis.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
             
             <!-- Tool 3 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
-                <div class="tool-icon text-7xl mb-6 floating">📅</div>
-                <h3 class="text-2xl font-bold mb-3">Smart Scheduling</h3>
+            <div class="tool-card p-6" data-tool="upscCurrent" style="transition-delay: 0.2s">
+                <div class="tool-icon bg-emerald-100 text-emerald-600">
+                    📅
+                </div>
+                <h3 class="text-xl font-bold mb-3">Smart Scheduling</h3>
                 <p class="text-gray-500 mb-6">AI-Powered Schedule Generator.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
+        </div>
+        
+        <!-- Ad Space -->
+        <div class="ad-space mt-12 visible">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '43e2bb13f24806c283fb098cfdb2d204',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.js"></script>
         </div>
     </section>
 
     <!-- ==================== FOCUS TOOLS ==================== -->
-    <section class="max-w-6xl mx-auto px-6 py-16 relative z-10">
+    <section class="max-w-6xl mx-auto px-6 py-16">
         <div class="section-header">
             <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-xl">
+                <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center text-amber-600 text-xl">
                     ⚡
                 </div>
-                <h2 class="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-amber-500 to-orange-500 bg-clip-text text-transparent">
                     Focus Tools
                 </h2>
             </div>
@@ -671,47 +765,58 @@
             Train your mind to resist distractions and enter deep focus states.
         </p>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Tool 1 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp">
-                <div class="tool-icon text-7xl mb-6 floating">🎯</div>
-                <h3 class="text-2xl font-bold mb-3">Deep Focus Mode</h3>
+            <div class="tool-card p-6" data-tool="deepFocus">
+                <div class="tool-icon bg-amber-100 text-amber-600">
+                    🎯
+                </div>
+                <h3 class="text-xl font-bold mb-3">Deep Focus Mode</h3>
                 <p class="text-gray-500 mb-6">Eliminate digital distractions completely.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
             
             <!-- Tool 2 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
-                <div class="tool-icon text-7xl mb-6 floating">⏳</div>
-                <h3 class="text-2xl font-bold mb-3">Pomodoro Pro</h3>
+            <div class="tool-card p-6" data-tool="pomodoro" style="transition-delay: 0.1s">
+                <div class="tool-icon bg-orange-100 text-orange-600">
+                    ⏳
+                </div>
+                <h3 class="text-xl font-bold mb-3">Pomodoro Pro</h3>
                 <p class="text-gray-500 mb-6">Advanced timer with analytics.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
             
             <!-- Tool 3 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
-                <div class="tool-icon text-7xl mb-6 floating">🚫</div>
-                <h3 class="text-2xl font-bold mb-3">Distraction Blocker</h3>
+            <div class="tool-card p-6" data-tool="distractionBlocker" style="transition-delay: 0.2s">
+                <div class="tool-icon bg-red-100 text-red-600">
+                    🚫
+                </div>
+                <h3 class="text-xl font-bold mb-3">Distraction Blocker</h3>
                 <p class="text-gray-500 mb-6">Identify and eliminate focus killers.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
+        </div>
+        
+        <!-- Ad Space -->
+        <div class="ad-space mt-12 visible">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '43e2bb13f24806c283fb098cfdb2d204',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.js"></script>
         </div>
     </section>
 
     <!-- ==================== STRESS TOOLS ==================== -->
-    <section class="max-w-6xl mx-auto px-6 py-16 relative z-10">
+    <section class="max-w-6xl mx-auto px-6 py-16">
         <div class="section-header">
             <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-xl">
+                <div class="w-12 h-12 rounded-full bg-pink-100 flex items-center justify-center text-pink-600 text-xl">
                     ☠️
                 </div>
-                <h2 class="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-pink-500 to-rose-500 bg-clip-text text-transparent">
                     Stress Management
                 </h2>
             </div>
@@ -721,47 +826,58 @@
             Build mental resilience against exam pressure and anxiety.
         </p>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Tool 1 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp">
-                <div class="tool-icon text-7xl mb-6 floating">💣</div>
-                <h3 class="text-2xl font-bold mb-3">Stress War Mode</h3>
+            <div class="tool-card p-6" data-tool="stressWar">
+                <div class="tool-icon bg-pink-100 text-pink-600">
+                    💣
+                </div>
+                <h3 class="text-xl font-bold mb-3">Stress War Mode</h3>
                 <p class="text-gray-500 mb-6">Simulate high-pressure exam conditions.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
             
             <!-- Tool 2 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
-                <div class="tool-icon text-7xl mb-6 floating">🧘</div>
-                <h3 class="text-2xl font-bold mb-3">Mindfulness Coach</h3>
+            <div class="tool-card p-6" data-tool="mindfulness" style="transition-delay: 0.1s">
+                <div class="tool-icon bg-rose-100 text-rose-600">
+                    🧘
+                </div>
+                <h3 class="text-xl font-bold mb-3">Mindfulness Coach</h3>
                 <p class="text-gray-500 mb-6">Guided meditation for students.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
             
             <!-- Tool 3 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
-                <div class="tool-icon text-7xl mb-6 floating">💤</div>
-                <h3 class="text-2xl font-bold mb-3">Sleep Optimizer</h3>
+            <div class="tool-card p-6" data-tool="sleep" style="transition-delay: 0.2s">
+                <div class="tool-icon bg-fuchsia-100 text-fuchsia-600">
+                    💤
+                </div>
+                <h3 class="text-xl font-bold mb-3">Sleep Optimizer</h3>
                 <p class="text-gray-500 mb-6">Improve sleep quality for better focus.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
+        </div>
+        
+        <!-- Ad Space -->
+        <div class="ad-space mt-12 visible">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '43e2bb13f24806c283fb098cfdb2d204',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.js"></script>
         </div>
     </section>
 
     <!-- ==================== LIFE TOOLS ==================== -->
-    <section class="max-w-6xl mx-auto px-6 py-16 relative z-10">
+    <section class="max-w-6xl mx-auto px-6 py-16">
         <div class="section-header">
             <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 rounded-full bg-orange-100 flex items-center justify-center text-orange-600 text-xl">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl">
                     🌱
                 </div>
-                <h2 class="text-3xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
+                <h2 class="text-3xl font-bold bg-gradient-to-r from-blue-500 to-cyan-500 bg-clip-text text-transparent">
                     Life Tools
                 </h2>
             </div>
@@ -771,58 +887,48 @@
             Tools for productivity, health, and personal growth beyond academics.
         </p>
         
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
             <!-- Tool 1 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp">
-                <div class="tool-icon text-7xl mb-6 floating">⏱️</div>
-                <h3 class="text-2xl font-bold mb-3">Death Clock</h3>
+            <div class="tool-card p-6" data-tool="deathClock">
+                <div class="tool-icon bg-blue-100 text-blue-600">
+                    ⏱️
+                </div>
+                <h3 class="text-xl font-bold mb-3">Death Clock</h3>
                 <p class="text-gray-500 mb-6">Visualize your remaining lifetime.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
             
             <!-- Tool 2 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp" style="animation-delay: 0.1s">
-                <div class="tool-icon text-7xl mb-6 floating">📝</div>
-                <h3 class="text-2xl font-bold mb-3">Journal Pro</h3>
+            <div class="tool-card p-6" data-tool="journal" style="transition-delay: 0.1s">
+                <div class="tool-icon bg-cyan-100 text-cyan-600">
+                    📝
+                </div>
+                <h3 class="text-xl font-bold mb-3">Journal Pro</h3>
                 <p class="text-gray-500 mb-6">Structured journaling for growth.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
             </div>
             
             <!-- Tool 3 -->
-            <div class="tool-card rounded-2xl p-8 flex flex-col items-center text-center animate__animated animate__fadeInUp" style="animation-delay: 0.2s">
-                <div class="tool-icon text-7xl mb-6 floating">🏋️</div>
-                <h3 class="text-2xl font-bold mb-3">Habit Forge</h3>
-                <p class="text-gray-500 mb-6">Build lasting habits with science.</p>
-                <button class="open-btn px-8 py-3 text-white rounded-full font-medium">
-                    Launch Tool 🚀
-                </button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Testimonial -->
-    <section class="bg-gradient-to-r from-orange-50 to-pink-50 py-20 px-6 relative overflow-hidden">
-        <div class="max-w-4xl mx-auto text-center relative z-10">
-            <div class="text-6xl mb-6">"</div>
-            <p class="text-2xl md:text-3xl font-medium mb-8">
-                First time seeing such an advanced yet free learning toolkit. The animations make it addictive to use!
-            </p>
-            <div class="flex items-center justify-center space-x-4">
-                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-orange-400 to-pink-500 flex items-center justify-center text-white font-bold">U</div>
-                <div>
-                    <p class="font-semibold">User from India</p>
-                    <p class="text-sm text-gray-500">Student</p>
+            <div class="tool-card p-6" data-tool="habit" style="transition-delay: 0.2s">
+                <div class="tool-icon bg-sky-100 text-sky-600">
+                    🏋️
                 </div>
+                <h3 class="text-xl font-bold mb-3">Habit Forge</h3>
+                <p class="text-gray-500 mb-6">Build lasting habits with science.</p>
             </div>
         </div>
         
-        <!-- Floating animated elements -->
-        <div class="absolute top-10 right-20 text-4xl opacity-20 animate-float" style="animation-delay: 0.3s">🧠</div>
-        <div class="absolute bottom-10 left-20 text-5xl opacity-20 animate-float" style="animation-delay: 0.7s">🚀</div>
+        <!-- Ad Space -->
+        <div class="ad-space mt-12 visible">
+            <script type="text/javascript">
+                atOptions = {
+                    'key' : '43e2bb13f24806c283fb098cfdb2d204',
+                    'format' : 'iframe',
+                    'height' : 90,
+                    'width' : 728,
+                    'params' : {}
+                };
+            </script>
+            <script type="text/javascript" src="//www.highperformanceformat.com/43e2bb13f24806c283fb098cfdb2d204/invoke.js"></script>
+        </div>
     </section>
 
     <!-- Footer -->
@@ -830,7 +936,7 @@
         <div class="max-w-6xl mx-auto text-center">
             <div class="flex items-center justify-center space-x-2 mb-6">
                 <span class="text-3xl">🧠</span>
-                <span class="text-2xl font-bold bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent glow-text">
+                <span class="text-2xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent">
                     MindForge
                 </span>
             </div>
@@ -856,7 +962,7 @@
                 </a>
             </div>
             
-            <p class="text-gray-500 text-sm mt-8">© 2023 MindForge. All magic reserved.</p>
+            <p class="text-gray-500 text-sm mt-8">© 2023 MindForge. All rights reserved.</p>
         </div>
     </footer>
 
@@ -903,59 +1009,6 @@
     </div>
 
     <script>
-        // Typewriter effect completion
-        setTimeout(() => {
-            const typewriter = document.querySelector('.typewriter');
-            if (typewriter) {
-                typewriter.style.borderRight = 'none';
-                typewriter.style.animation = 'none';
-            }
-        }, 3000);
-
-        // Floating particles animation
-        function createParticles() {
-            const container = document.body;
-            const particleCount = 30;
-            
-            for (let i = 0; i < particleCount; i++) {
-                const particle = document.createElement('div');
-                particle.className = 'particle';
-                
-                // Random properties
-                const size = Math.random() * 10 + 5;
-                const posX = Math.random() * window.innerWidth;
-                const posY = Math.random() * window.innerHeight;
-                const delay = Math.random() * 5;
-                const duration = Math.random() * 10 + 10;
-                const opacity = Math.random() * 0.4 + 0.1;
-                
-                particle.style.width = `${size}px`;
-                particle.style.height = `${size}px`;
-                particle.style.left = `${posX}px`;
-                particle.style.top = `${posY}px`;
-                particle.style.animation = `float ${duration}s ease-in-out ${delay}s infinite`;
-                particle.style.opacity = opacity;
-                
-                container.appendChild(particle);
-            }
-        }
-        
-        // Initialize animations
-        document.addEventListener('DOMContentLoaded', () => {
-            createParticles();
-            
-            // Add hover effects to all tool cards
-            document.querySelectorAll('.tool-card').forEach(card => {
-                card.addEventListener('mouseenter', () => {
-                    card.querySelector('.tool-icon').classList.add('animate__animated', 'animate__pulse');
-                });
-                
-                card.addEventListener('mouseleave', () => {
-                    card.querySelector('.tool-icon').classList.remove('animate__animated', 'animate__pulse');
-                });
-            });
-        });
-
         // Text Rotation Animation
         const texts = document.querySelectorAll('.typing-text');
         let currentIndex = 0;
@@ -1153,13 +1206,23 @@
         const desktopTransition = document.getElementById('desktopTransition');
         
         viewToggle.addEventListener('click', function() {
-            document.body.classList.toggle('desktop-mode');
+            // Show transition screen
+            desktopTransition.classList.add('active');
             
-            if (document.body.classList.contains('desktop-mode')) {
-                this.innerHTML = '<i class="fas fa-mobile-alt"></i>';
-            } else {
-                this.innerHTML = '<i class="fas fa-desktop"></i>';
-            }
+            setTimeout(() => {
+                document.body.classList.toggle('desktop-mode');
+                
+                if (document.body.classList.contains('desktop-mode')) {
+                    this.innerHTML = '<i class="fas fa-mobile-alt"></i>';
+                } else {
+                    this.innerHTML = '<i class="fas fa-desktop"></i>';
+                }
+                
+                // Hide transition screen after change is complete
+                setTimeout(() => {
+                    desktopTransition.classList.remove('active');
+                }, 500);
+            }, 1500);
         });
     </script>
 </body>
